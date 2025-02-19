@@ -1,13 +1,5 @@
 ## NorthShore TimeTracking
 
-```mermaid
-mindmap
-root((ERM))
-    Manage Projects
-    Time Tracking
-    Real-time Pub/Sub
-    
-```
 
 Design an Enterprise Resource Management system 
 - Manages current year's projects
