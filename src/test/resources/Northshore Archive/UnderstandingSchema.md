@@ -56,15 +56,13 @@ classDiagram
 Let me explain each component of the Block schema:
 
 Block Table Record (Block Definition):
-
-Name: Unique identifier for the block
-Origin: Base point coordinates (0,0,0 by default)
-Layer: Layer the block was created on
-Entities: Collection of objects that make up the block
-Flags: IsLayout, IsAnonymous, HasAttributes, etc.
-XData: Extended data (custom properties)
-Handle: Unique identifier in the DWG database
-
+- `Name`: Unique identifier for the block
+- `Origin`: Base point coordinates (0,0,0 by default)
+- `Layer`: Layer the block was created on
+- `Entities`: Collection of objects that make up the block
+- `Flags`: IsLayout, IsAnonymous, HasAttributes, etc.
+- `XData`: Extended data (custom properties)
+- `Handle`: Unique identifier in the DWG database
 
 Block Reference (Block Insert):
 

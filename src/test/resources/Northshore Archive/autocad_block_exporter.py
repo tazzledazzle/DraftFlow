@@ -1,7 +1,6 @@
 import logging
 import platform
 import subprocess
-import winreg
 
 import ezdxf
 from ezdxf.addons import odafc
@@ -575,28 +574,20 @@ class DXFBlockExporter:
 
 
 def main():
-    """Example usage of the block exporter."""
-    # ezdxf.options.read_file("my_config.ini")
-    try:
-        MSIInstaller("")
-        ODA_FILE_PATH = ODAConverter().find_oda_converter()
-        print(ODA_FILE_PATH)
-        input_file = Path("2023-505 1st Ave S (6334)-XREF-Base Details.dwg").absolute()
-        doc = odafc.readfile(input_file)
-        msp = doc.modelspace()
-        print(msp)
-        # exporter = DXFBlockExporter(input_file)
+    # Path to the DWG/DXF file
+    dxf_filename = "/Users/terenceschumacher/IdeaProjects/DraftFlow/src/test/resources/Northshore Archive/dxf/2023-Costco Issaquah Bldg 4 (6480)-XREF-Base Details.dwf"
+    dwg_filename = "/Users/terenceschumacher/IdeaProjects/DraftFlow/src/test/resources/Northshore Archive/dwgFiles/2023-Costco Issaquah Bldg 4 (6480)-XREF-Base Details.dwg"
+    from ezdxf.addons.dwg.loader import readfile
 
-        # Export blocks
-        # csv_path = exporter.export_to_csv()
+    doc = readfile(dwg_filename)
+    # Initialize the DXFBlockExporter
+    exporter = DXFBlockExporter(dxf_filename)
 
-        # Show results
-        print(f"\nExport completed successfully!")
-        # print(f"CSV file created at: {csv_path}")
+    # Export block data to CSV
+    output_path = exporter.export_to_csv()
 
-    except Exception as e:
-        print(f"Error: {str(e)}")
-
+    # Print the path to the exported CSV file
+    print(f"Block data exported to: {output_path}")
 
 if __name__ == "__main__":
     main()
