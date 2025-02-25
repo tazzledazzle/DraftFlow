@@ -1632,3 +1632,8 @@ Key aspects of the design include:
 5. Comprehensive testing strategy to ensure robustness
 
 The implementation can begin with the core backend services, followed by the web interface and Excel integration components. By adopting a phased approach, the team can deliver incremental value while ensuring high quality throughout the development process.
+
+
+## todo
+- [ ] Add more details to the design document
+- [ ] setup github workflow to build
