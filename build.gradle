@@ -1,7 +1,5 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '2.1.10'
-//    id 'org.jetbrains.kotlin.plugin.spring' version '1.9.25'
-//    id 'org.springframework.boot' version '3.4.2'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.25'
 }
@@ -21,28 +19,7 @@ repositories {
 }
 
 dependencies {
-//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-//    implementation 'org.flywaydb:flyway-core'
-//    implementation 'org.flywaydb:flyway-database-postgresql'
-    implementation 'org.jetbrains.kotlin:kotlin-reflect'
-    // https://mvnrepository.com/artifact/com.aspose/aspose-cad
-    implementation files('$projectDir/gradle/aspose-cad-24.6.1.jar')
 
-
-//    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//    runtimeOnly 'org.postgresql:postgresql'
-
-//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//    testImplementation 'io.kotest:kotest-runner-junit5-jvm'
-//    testImplementation 'io.kotest:kotest-assertions-core-jvm'
-    testImplementation 'io.kotest:kotest-core-jvm'
-//    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
-    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
-//    testImplementation 'org.springframework.security:spring-security-test'
-//    testImplementation 'org.testcontainers:junit-jupiter'
-//    testImplementation 'org.testcontainers:postgresql'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 kotlin {
@@ -50,12 +27,6 @@ kotlin {
         freeCompilerArgs.addAll '-Xjsr305=strict'
     }
 }
-
-//allOpen {
-//    annotation 'jakarta.persistence.Entity'
-//    annotation 'jakarta.persistence.MappedSuperclass'
-//    annotation 'jakarta.persistence.Embeddable'
-//}
 
 tasks.named('test') {
     useJUnitPlatform()
