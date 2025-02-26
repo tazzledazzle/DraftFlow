@@ -6,6 +6,6 @@ class UserService {
     fun createUser(name: String): User {
         println("User created: $name")
 
-        return User(name)
+        return User(firstName = name)
     }
 }
