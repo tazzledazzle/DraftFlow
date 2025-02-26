@@ -1,11 +1,12 @@
 package services
 
 import models.User
+import models.UserRole
 
 class UserService {
-    fun createUser(name: String): User {
-        println("User created: $name")
+    fun createUser(firstName: String, lastName: String = "", email: String = "", password: String, userRole: UserRole): User {
+        println("User created: $firstName")
 
-        return User(firstName = name)
+        return User(firstName = firstName)
     }
 }
