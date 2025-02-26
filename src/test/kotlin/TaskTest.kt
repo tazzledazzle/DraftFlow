@@ -1,7 +1,6 @@
-package models
-
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
+import models.Task
 
 class TaskTest : ExpectSpec({
     expect("has a name") {

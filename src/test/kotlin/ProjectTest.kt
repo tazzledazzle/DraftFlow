@@ -1,6 +1,5 @@
-package models
-
 import io.kotest.core.spec.style.ExpectSpec
+import models.Project
 
 class ProjectTest : ExpectSpec({
     context("Project") {

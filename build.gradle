@@ -79,6 +79,7 @@ kotlin {
 
 test {
     useJUnitPlatform()
+
 }
 
 // JPA/Hibernate annotations
@@ -94,11 +95,13 @@ noArg {
 }
 
 //TODO("make sure this dependency exists")
+//tasks.bootJar {
+//    archiveFileName.set("northshore-timesheet-app.jar")
+//    mainClass = "App"
+//}
 tasks.bootJar {
-    archiveFileName.set("northshore-timesheet-app.jar")
-    mainClass.set("App")
+    mainClass = "App"
 }
-
 
 plugins.apply("jacoco")
 tasks.named("jacocoTestReport") {
