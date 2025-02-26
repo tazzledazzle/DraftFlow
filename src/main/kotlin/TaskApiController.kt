@@ -1,3 +1,6 @@
+import dto.TaskCreateDto
+import dto.TaskUpdateDto
+import jakarta.validation.Valid
 import models.Task
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
