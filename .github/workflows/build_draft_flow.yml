@@ -45,13 +45,13 @@ jobs:
         run: ./gradlew test
 
       - name: Build Excel Add-In
-        working-directory: ../../excel-addin
+        working-directory: ./excel-addin
         run: |
           npm install
           npm run build
 
       - name: Run Excel Add-In tests
-        working-directory: ../../excel-addin
+        working-directory: ./excel-addin
         run: npm test
 
       - name: Build Docker image
