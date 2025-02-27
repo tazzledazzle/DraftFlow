@@ -61,7 +61,7 @@ jobs:
         run: docker save timesheet-app:latest > timesheet-app.tar
 
       - name: Upload Docker image
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: docker-image
           path: timesheet-app.tar
