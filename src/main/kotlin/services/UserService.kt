@@ -1,13 +1,9 @@
 package services
 
 import dto.UsersCreateDto
-import dto.UsersDto
 import dto.UsersUpdateDto
-import jakarta.persistence.Id
 import models.User
 import models.UserRole
-import org.springframework.web.bind.annotation.PathVariable
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 class UserService {
@@ -42,13 +38,17 @@ class UserService {
         )
     }
 
-    fun getUserById(string: Long): User? {
-        TODO("Not yet implemented")
+    fun getUserById(id: Long): User? {
+        return getUserById(id)
     }
 
     fun updateUser(id: Long,
                    userUpdateDto: UsersUpdateDto): User? {
         val user = getUserById(id) ?: return null
+        return null
+    }
 
+    fun deleteUser(id: Long): Boolean {
+        TODO("Not yet implemented")
     }
 }

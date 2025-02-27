@@ -38,3 +38,12 @@ data class TaskUpdateDto(
     @field:PositiveOrZero(message = "Estimated hours must be 0 or greater")
     val estimatedHours: Double? = null
 )
+
+data class TaskHoursDto(
+    val id: Long,
+    val name: String,
+    @field:PositiveOrZero(message = "Estimated hours must be 0 or greater")
+    val estimatedHours: Double,
+    @field:PositiveOrZero(message = "Hours worked must be 0 or greater")
+    val hoursWorked: Double
+)

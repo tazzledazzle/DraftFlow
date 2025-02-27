@@ -5,6 +5,7 @@ import dto.UsersDto
 import jakarta.validation.Valid
 import models.User
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -49,5 +50,11 @@ class UsersApiController(private val userService: UserService) {
         return userService.updateUser(id, usersDto)
             ?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.notFound().build()
+    }
+
+    @DeleteMapping("/api/users/{id}")
+    fun deleteUser(@PathVariable id: Long): ResponseEntity<Unit> {
+        userService.deleteUser(id)
+        return ResponseEntity.noContent().build()
     }
 }
