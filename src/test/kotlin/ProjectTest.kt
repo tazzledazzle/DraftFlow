@@ -1,8 +1,10 @@
+import io.kotest.core.annotation.AutoScan
 import io.kotest.core.spec.style.ExpectSpec
 import models.Project
 import services.ProjectTestController
 import java.time.LocalDateTime
 
+@AutoScan
 class ProjectTest : ExpectSpec({
     context("Project") {
         val project = ProjectTestController.createProject()

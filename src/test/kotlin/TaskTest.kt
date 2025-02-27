@@ -1,8 +1,10 @@
+import io.kotest.core.annotation.AutoScan
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
 import models.Task
 import java.time.LocalDateTime
 
+@AutoScan
 class TaskTest : ExpectSpec({
     expect("has a name") {
         val task = Task(1, 1, "Task 1", "Description", 10.0, LocalDateTime.of(2021,1,1,0,0))
@@ -36,7 +38,7 @@ class TaskTest : ExpectSpec({
 
     expect("can be converted to a string") {
         val task = Task(1, 1, "Task 1", "Description", 10.0, LocalDateTime.of(2021,1,1,0,0))
-        task.toString() shouldBe "Task(id=1, projectId=1, name=Task 1, description=Description, estimatedHours=10, createdAt=2021-01-01)"
+        task.toString() shouldBe "Task(id=1, projectId=1, name=Task 1, description=Description, estimatedHours=10.0, createdAt=2021-01-01T00:00)"
     }
 
     xexpect("can be converted to a map") {
