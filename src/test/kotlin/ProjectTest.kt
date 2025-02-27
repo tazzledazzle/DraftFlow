@@ -1,24 +1,17 @@
 import io.kotest.core.spec.style.ExpectSpec
 import models.Project
+import java.time.LocalDateTime
 
 class ProjectTest : ExpectSpec({
     context("Project") {
-        val project = Project(
-            "1",
-            "1",
-            "Project 1",
-            "Description 1",
-            "2021-01-01",
-            "2021-12-31",
-            "2021-01-01"
-        )
+        val project = createProject()
 
         expect("id is 1") {
-            project.id == "1"
+            project.id == 1
         }
 
         expect("projectManagerId is 1") {
-            project.projectManagerId == "1"
+            project.projectManagerId == 1
         }
 
         expect("name is Project 1") {

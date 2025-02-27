@@ -21,7 +21,7 @@ data class Project (
     var id: Long = 0L,
 
     @Column(nullable = false)
-    var projectManagerId: String = "",
+    var projectManagerId: Long = 0L,
 
     @Column
     var name: String = "",
@@ -30,10 +30,10 @@ data class Project (
     var description: String = "",
 
     @Column(name = "start_date")
-    var startDate: String = "",
+    var startDate:  LocalDateTime? = null,
 
     @Column(name = "end_date")
-    var endDate: String = "",
+    var endDate:  LocalDateTime? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_manager_id")

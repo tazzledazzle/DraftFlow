@@ -1,16 +1,11 @@
 package controllers
 
 import dto.UsersCreateDto
-import dto.UsersDto
+import dto.UsersUpdateDto
 import jakarta.validation.Valid
 import models.User
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.*
 import services.UserService
 
 
@@ -45,7 +40,7 @@ class UsersApiController(private val userService: UserService) {
     @PutMapping("/api/users/{id}")
     fun updateUser(
         @PathVariable id: Long,
-        @Valid @RequestBody usersDto: UsersDto
+        @Valid @RequestBody usersDto: UsersUpdateDto
     ): ResponseEntity<User> {
         return userService.updateUser(id, usersDto)
             ?.let { ResponseEntity.ok(it) }
