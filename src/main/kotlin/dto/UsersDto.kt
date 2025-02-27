@@ -27,3 +27,14 @@ data class UsersCreateDto (
     var role: UserRole = UserRole.FOREMAN, // foreman role only pushes data, more secure
     var createdAt: LocalDateTime = LocalDateTime.now()
 )
+
+data class UsersUpdateDto (
+    var firstName: String = "",
+    var lastName: String = "",
+    @field:NotBlank(message = "Email is required")
+    var email: String = "",
+    @field:NotBlank(message = "Password is required")
+    var password: String = "",
+    var role: UserRole = UserRole.FOREMAN, // foreman role only pushes data, more secure
+    var createdAt: LocalDateTime = LocalDateTime.now()
+)
