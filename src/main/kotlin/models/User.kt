@@ -18,9 +18,9 @@ data class User(
     var firstName: String = "",
     @Column
     var lastName: String = "",
-    @Column
+    @Column(nullable = false)
     var email: String = "",
-    @Column
+    @Column(nullable = false)
     var password: String = "",
     @Column
     var role: UserRole = UserRole.FOREMAN, // foreman role only pushes data, more secure

@@ -26,20 +26,20 @@ import java.net.URI
 * */
 class TaskApiController(private val taskService: TaskService) {
 
-    @GetMapping("/project/{projectId}")
+    @GetMapping("/api/tasks/project/{projectId}")
     fun getTasksByProject(@PathVariable projectId: Long): ResponseEntity<List<Task>> {
         val tasks = taskService.getTasksByProject(projectId)
         return ResponseEntity.ok(tasks)
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("api/tasks/{id}")
     fun getTask(@PathVariable id: Long): ResponseEntity<Task> {
         return taskService.getTaskById(id)
             ?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.notFound().build()
     }
 
-    @PostMapping
+    @PostMapping("/api/tasks")
     fun createTask(@Valid @RequestBody Task: TaskCreateDto): ResponseEntity<Task> {
         val created = taskService.createTask(Task)
         return ResponseEntity
@@ -47,7 +47,7 @@ class TaskApiController(private val taskService: TaskService) {
             .body(created)
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/api/tasks/{id}")
     fun updateTask(
         @PathVariable id: Long,
         @Valid @RequestBody Task: TaskUpdateDto
@@ -57,7 +57,7 @@ class TaskApiController(private val taskService: TaskService) {
             ?: ResponseEntity.notFound().build()
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/tasks/{id}")
     fun deleteTask(@PathVariable id: Long): ResponseEntity<Void> {
         val deleted = taskService.deleteTask(id)
         return if (deleted) {

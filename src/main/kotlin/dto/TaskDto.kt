@@ -16,6 +16,7 @@ data class TaskDto (
 data class TaskCreateDto(
     @field:NotBlank(message = "Name is required")
     val name: String,
+
     @field:NotNull(message = "Project ID is required")
     val projectId: Long,
 
@@ -28,6 +29,7 @@ data class TaskCreateDto(
 data class TaskUpdateDto(
     @field:NotBlank(message = "Name is required")
     val name: String,
+
     @field:NotNull(message = "Project ID is required")
     val projectId: Long,
 
