@@ -1,0 +1,12 @@
+{
+  "name": "excel-addin",
+  "version": "1.0.0",
+  "description": "add-in to extract and write data to excel sheets",
+  "license": "ISC",
+  "author": "terence schumacher",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
