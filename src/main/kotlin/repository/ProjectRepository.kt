@@ -18,11 +18,5 @@ interface ProjectRepository : JpaRepository<Project, Long> {
     fun findActiveProjects(@Param("date") date: LocalDate): List<Project>
 }
 
-interface TaskRepository : JpaRepository<Task, Long> {
-    fun findByProjectId(projectId: Long): List<Task>
-
-    @Query("SELECT COUNT(t) FROM Task t WHERE t.projectId = :projectId")
-    fun countTasksByProjectId(@Param("projectId") projectId: Long): Long
-}
 
 
