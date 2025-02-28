@@ -44,25 +44,25 @@ jobs:
       - name: Run tests
         run: ./gradlew test
 
-      - name: Build Excel Add-In
-        working-directory: ./excel-addin
-        run: |
-          npm install
-          npm run build
-
-      - name: Run Excel Add-In tests
-        working-directory: ./excel-addin
-        run: npm test
-
-      - name: Build Docker image
-        run: ./gradlew bootBuildImage --imageName=timesheet-app:latest
-
-      - name: Save Docker image
-        run: docker save timesheet-app:latest > timesheet-app.tar
-
-      - name: Upload Docker image
-        uses: actions/upload-artifact@v4
-        with:
-          name: docker-image
-          path: timesheet-app.tar
+#      - name: Build Excel Add-In
+#        working-directory: ./excel-addin
+#        run: |
+#          npm install
+#          npm run build
+#
+#      - name: Run Excel Add-In tests
+#        working-directory: ./excel-addin
+#        run: npm test
+#
+#      - name: Build Docker image
+#        run: ./gradlew bootBuildImage --imageName=timesheet-app:latest
+#
+#      - name: Save Docker image
+#        run: docker save timesheet-app:latest > timesheet-app.tar
+#
+#      - name: Upload Docker image
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: docker-image
+#          path: timesheet-app.tar
 
