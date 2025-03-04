@@ -1,4 +1,4 @@
-package services
+package com.northshore.services
 
 class ProjectService {
 }
