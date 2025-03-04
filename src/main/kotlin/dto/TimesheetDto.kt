@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Positive
+import services.toDto
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class TimesheetEntryDto(
@@ -18,7 +20,7 @@ data class TimesheetEntryDto(
     val notes: String? = null,
     @field:NotNull(message = "workDate is required")
     @field:JsonFormat(pattern = "yyyy-MM-dd--HH:mm:ss")
-    val workDate: LocalDateTime,
+    val workDate: LocalDate,
 
     @field:JsonFormat(pattern = "yyyy-MM-dd--HH:mm:ss")
     val submittedAt: LocalDateTime? = null,
@@ -34,7 +36,7 @@ data class TimesheetSubmitDto (
     val notes: String? = null,
     @field:NotNull(message = "workDate is required")
     @field:JsonFormat(pattern = "yyyy-MM-dd--HH:mm:ss")
-    val workDate: LocalDateTime,
+    val workDate: LocalDate,
 
     @field:JsonFormat(pattern = "yyyy-MM-dd--HH:mm:ss")
     val submittedAt: LocalDateTime? = null,
@@ -69,4 +71,21 @@ data class WeeklyTimesheetDto (
 
     @field:JsonFormat(pattern = "yyyy-MM-dd--HH:mm:ss")
     val submittedAt: LocalDateTime? = null,
+
+    val employeeName: String? = username,
+    val weekStartDate: LocalDate,
+    val weekEndDate: LocalDate,
+    val totalHours: Double?,
+    val entries: List<WeeklyTimesheetDto> = emptyList()
+)
+
+data class TaskHoursDto(
+    val taskId: Long,
+    val taskName: String,
+    val totalHours: Double
+)
+
+data class EmployeeHoursDto(
+    val employeeName: String,
+    val totalHours: Double
 )

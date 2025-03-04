@@ -1,8 +1,7 @@
-package repository
-
-import dto.TaskHoursDto
 import models.TimesheetEntry
+import com.northshore.dto.TaskHoursDto
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import java.time.LocalDate
 
@@ -13,9 +12,10 @@ interface TimesheetEntryRepository : JpaRepository<TimesheetEntry, Long> {
 
     fun findByWorkDateBetween(startDate: LocalDate, endDate: LocalDate): List<TimesheetEntry>
 
-    //    @Query("SELECT NEW com.yourcompany.timesheet.dto.TaskHoursDto(t.id, t.name, SUM(te.hoursWorked)) " +
+//    @Query("SELECT NEW TaskHoursDto(t.id, t.name, SUM(te.hoursWorked)) " +
 //            "FROM Task t JOIN t.timesheetEntries te " +
-//            "WHERE t.projectId = :projectId " +
-//            "GROUP BY t.id, t.name")
+//            "WHERE t.project.id = :projectId " +
+//            "GROUP BY t.id, t.name " +
+//            "ORDER BY SUM(te.hoursWorked) DESC")
     fun getTaskHoursByProject(@Param("projectId") projectId: Long): List<TaskHoursDto>
 }
