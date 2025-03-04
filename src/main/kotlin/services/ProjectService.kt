@@ -1,12 +1,15 @@
 package com.northshore.services
 
+import com.northshore.repository.UserRepository
 import dto.ProjectCreateDto
 import dto.ProjectDto
 import dto.ProjectUpdateDto
+import models.Project
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import repository.ProjectRepository
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 /**
  * Service interface for Project management operations
@@ -103,7 +106,7 @@ class ProjectServiceImpl(
         // Create project entity
         val project = Project(
             name = projectDto.name,
-            description = projectDto.description,
+            description = projectDto.description!!,
             startDate = projectDto.startDate,
             endDate = projectDto.endDate
         )
@@ -111,7 +114,7 @@ class ProjectServiceImpl(
         // Associate project manager if provided
         projectDto.projectManagerId?.let { pmId ->
             val projectManager = userRepository.findById(pmId)
-                .orElseThrow { ResourceNotFoundException("Project manager not found with id: $pmId") }
+                .orElseThrow { Exception("Project manager not found with id: $pmId") }
             project.projectManager = projectManager
         }
 
@@ -132,14 +135,14 @@ class ProjectServiceImpl(
         return projectRepository.findById(id).map { project ->
             // Update project properties
             project.name = projectDto.name
-            project.description = projectDto.description
+            project.description = projectDto.description!!
             project.startDate = projectDto.startDate
             project.endDate = projectDto.endDate
 
             // Update project manager if provided
             projectDto.projectManagerId?.let { pmId ->
                 val projectManager = userRepository.findById(pmId)
-                    .orElseThrow { ResourceNotFoundException("Project manager not found with id: $pmId") }
+                    .orElseThrow { Exception("Project manager not found with id: $pmId") }
                 project.projectManager = projectManager
             }
 
@@ -171,13 +174,13 @@ class ProjectServiceImpl(
      * Validates project data
      * @throws InvalidDataException if any validation fails
      */
-    private fun validateProjectData(name: String, startDate: LocalDate?, endDate: LocalDate?) {
+    private fun validateProjectData(name: String, startDate: LocalDateTime?, endDate: LocalDateTime?) {
         if (name.isBlank()) {
-            throw InvalidDataException("Project name cannot be empty")
+            throw Exception("Project name cannot be empty")
         }
 
         if (endDate != null && startDate != null && endDate.isBefore(startDate)) {
-            throw InvalidDataException("End date cannot be before start date")
+            throw Exception("End date cannot be before start date")
         }
     }
 

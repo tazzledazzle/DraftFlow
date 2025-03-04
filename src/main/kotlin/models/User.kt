@@ -13,7 +13,7 @@ import java.time.LocalDateTime
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: String = "",
+    var id: Long = 0L,
     @Column
     var firstName: String = "",
     @Column
