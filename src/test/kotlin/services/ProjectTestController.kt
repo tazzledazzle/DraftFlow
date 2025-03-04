@@ -1,9 +1,11 @@
 package services
 
+import com.northshore.services.ProjectService
+import controllers.ProjectApiController
 import models.Project
 import java.time.LocalDateTime
 
-class ProjectTestController(private val projectService: ProjectService) {
+class ProjectTestController(private val projectService: ProjectService) : ProjectApiController{
     companion object {
         fun getProjects() {
             TODO()

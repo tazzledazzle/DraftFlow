@@ -7,12 +7,14 @@ class App {
     fun main(array: Array<String> = emptyArray()) {
 
         try {
-            val props = DatabaseConfig.getProperties(DatabaseConfig())
-            props.keys.forEach {
-                println(it)
-            }
+            //todo: setup property retrieval
+//            val props = DatabaseConfig.getProperties(DatabaseConfig)
+//            props.keys.forEach {
+//                println(it)
+//            }
         } catch (e: Exception) {
             TODO("Not yet implemented")
         }
+
     }
 }

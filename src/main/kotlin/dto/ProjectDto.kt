@@ -25,3 +25,12 @@ data class ProjectCreateDto(
     @field:NotNull(message = "Project Manager ID is required")
     val projectManagerId: Long? = null
 )
+data class ProjectUpdateDto(
+    @field:NotBlank(message = "Name is required")
+    val name: String,
+    val description: String? = null,
+    val startDate: LocalDate? = null,
+    val endDate: LocalDate? = null,
+    @field:NotNull(message = "Project Manager ID is required")
+    val projectManagerId: Long? = null
+)

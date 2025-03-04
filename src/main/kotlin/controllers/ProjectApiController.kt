@@ -1,12 +1,12 @@
 package controllers
 
+import com.northshore.services.ProjectService
 import models.Project
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
-import services.ProjectService
 
 /*
             * Endpoint	Method	Description	Request	Response
