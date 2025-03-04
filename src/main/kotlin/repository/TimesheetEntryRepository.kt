@@ -1,5 +1,7 @@
+import com.northshore.dto.EmployeeHoursDto
 import models.TimesheetEntry
 import com.northshore.dto.TaskHoursDto
+import com.northshore.dto.WeeklyTimesheetDto
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
@@ -18,4 +20,7 @@ interface TimesheetEntryRepository : JpaRepository<TimesheetEntry, Long> {
 //            "GROUP BY t.id, t.name " +
 //            "ORDER BY SUM(te.hoursWorked) DESC")
     fun getTaskHoursByProject(@Param("projectId") projectId: Long): List<TaskHoursDto>
+
+    fun findByEmployeeNameAndWorkDateBetween(employeeName: String, weekStartDate: LocalDate, weekEndDate: LocalDate): List<WeeklyTimesheetDto>
+
 }

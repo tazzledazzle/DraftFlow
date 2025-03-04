@@ -76,7 +76,7 @@ data class WeeklyTimesheetDto (
     val weekStartDate: LocalDate,
     val weekEndDate: LocalDate,
     val totalHours: Double?,
-    val entries: List<WeeklyTimesheetDto> = emptyList()
+    var entries: List<WeeklyTimesheetDto> = emptyList()
 )
 
 data class TaskHoursDto(
