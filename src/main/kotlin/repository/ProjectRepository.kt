@@ -12,6 +12,7 @@ import java.time.LocalDate
 interface ProjectRepository : JpaRepository<Project, Long> {
     fun findByProjectManagerId(projectManagerId: Long): List<Project>
 
+    fun findProjectById(id: Long): Project?
     fun findByNameContainingIgnoreCase(name: String): List<Project>
 
     @Query("SELECT p FROM Project p WHERE p.startDate <= :date AND (p.endDate IS NULL OR p.endDate >= :date)")

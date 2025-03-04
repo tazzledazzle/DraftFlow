@@ -30,7 +30,7 @@ class TaskApiController(private val taskService: TaskService) {
 
     @GetMapping("/api/tasks/project/{projectId}")
     fun getTasksByProject(@PathVariable projectId: Long): ResponseEntity<List<Task>> {
-        val tasks = taskService.getTasksByProject(projectId)
+        val tasks = taskService.getTasksByProjectId(projectId)
         return ResponseEntity.ok(tasks)
     }
 

@@ -14,6 +14,8 @@ data class TaskDto (
 )
 
 data class TaskCreateDto(
+    var id: Long? = null,
+
     @field:NotBlank(message = "Name is required")
     val name: String,
 
@@ -27,6 +29,8 @@ data class TaskCreateDto(
 )
 
 data class TaskUpdateDto(
+    var id: Long? = null,
+
     @field:NotBlank(message = "Name is required")
     val name: String,
 
@@ -41,6 +45,10 @@ data class TaskUpdateDto(
 
 data class TaskHoursDto(
     val id: Long,
+
+    @field:NotNull(message = "Project ID is required")
+    val projectId: Long,
+
     val name: String,
     @field:PositiveOrZero(message = "Estimated hours must be 0 or greater")
     val estimatedHours: Double,

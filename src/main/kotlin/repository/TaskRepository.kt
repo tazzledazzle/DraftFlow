@@ -10,4 +10,5 @@ interface TaskRepository : JpaRepository<Task, Long> {
 
     @Query("SELECT COUNT(t) FROM Task t WHERE t.projectId = :projectId")
     fun countTasksByProjectId(@Param("projectId") projectId: Long): Long
+    fun getTaskById(lng: Long): Task?
 }
