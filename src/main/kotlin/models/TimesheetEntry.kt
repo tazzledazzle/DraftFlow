@@ -16,7 +16,7 @@ data class TimesheetEntry(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     @Column
-    var taskId: Long = 0L,
+    var taskId: Long = 0L, // todo: Task Object
     @Column(name = "employee_name")
     var employeeName: String = "",
     @Column(name = "hours_worked")

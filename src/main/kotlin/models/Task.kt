@@ -16,7 +16,7 @@ data class Task (
     var id: Long? = null,
 
     @Column(nullable = false)
-    var projectId: Long = 0L,
+    var projectId: Long = 0L, //todo: Project Object
     @Column
     var name: String = "",
     @Column

@@ -21,7 +21,7 @@ data class Project (
     var id: Long = 0L,
 
     @Column(nullable = false)
-    var projectManagerId: Long = 0L,
+    var projectManagerId: Long = 0L, // todo: User Object
 
     @Column
     var name: String = "",
