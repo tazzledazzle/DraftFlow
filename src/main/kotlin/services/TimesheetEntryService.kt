@@ -9,6 +9,7 @@ import com.northshore.dto.WeeklyTimesheetDto
 import com.northshore.exceptions.InvalidDataException
 import com.northshore.exceptions.ResourceNotFoundException
 import models.TimesheetEntry
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import repository.ProjectRepository
@@ -26,6 +27,8 @@ interface TimesheetEntryService {
     fun getEntriesByDateRange(startDate: LocalDate, endDate: LocalDate): List<TimesheetEntryDto>
     fun getEmployeeHoursSummary(projectId: Long): List<EmployeeHoursDto>
     fun deleteEntry(id: Long): Boolean
+    fun getTimeEntryById(entryId: Long): TimesheetEntryDto
+    fun getEntriesByProject(projectId: Long, startDate: LocalDate?, endDate: LocalDate?): List<TimesheetEntryDto>
 }
 @Service
 class TimesheetEntryServiceImpl(
@@ -111,7 +114,7 @@ class TimesheetEntryServiceImpl(
             throw ResourceNotFoundException("Project not found with id: $projectId")
         }
 
-        return timesheetEntryRepository.findByTaskProjectId(projectId)
+        return timesheetEntryRepository.findByProjectId(projectId)
             .map { it.toDto() }
     }
 
@@ -165,7 +168,7 @@ class TimesheetEntryServiceImpl(
         }
 
         // Fetch all timesheet entries for the project
-        val entries = timesheetEntryRepository.findByTaskProjectId(projectId)
+        val entries = timesheetEntryRepository.findByProjectId(projectId)
 
         // Group by employee name and calculate total hours
         return entries.groupBy { it.employeeName }
@@ -188,6 +191,19 @@ class TimesheetEntryServiceImpl(
         }
     }
 
+    override fun getEntriesByProject(
+        projectId: Long,
+        startDate: LocalDate?,
+        endDate: LocalDate?
+    ): List<TimesheetEntryDto> {
+        val project = projectRepository.findById(projectId)
+            .orElseThrow { ResourceNotFoundException("Project not found with id: $projectId") }
+        val entries = timesheetEntryRepository.findByProjectId(projectId)
+    }
+
+    override fun getTimeEntryById(entryId: Long): TimesheetEntryDto {
+        return timesheetEntryRepository.findByIdOrNull(entryId)
+    }
 
 }
 

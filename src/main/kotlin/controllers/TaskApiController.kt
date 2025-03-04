@@ -1,19 +1,5 @@
 package controllers
 
-import dto.TaskCreateDto
-import dto.TaskUpdateDto
-import jakarta.validation.Valid
-import models.Task
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import services.TaskService
-import java.net.URI
-
 /*
 *
     | Endpoint | Method | Description | Request | Response |
@@ -26,40 +12,53 @@ import java.net.URI
 
 *
 * */
+
+import com.northshore.dto.TaskHoursDto
+import dto.TaskCreateDto
+import dto.TaskDto
+import dto.TaskUpdateDto
+import jakarta.validation.Valid
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
+import services.TaskService
+import java.net.URI
+
+@RestController
+@RequestMapping("/api/tasks")
 class TaskApiController(private val taskService: TaskService) {
 
-    @GetMapping("/api/tasks/project/{projectId}")
-    fun getTasksByProject(@PathVariable projectId: Long): ResponseEntity<List<Task>> {
+    @GetMapping("/project/{projectId}")
+    fun getTasksByProject(@PathVariable projectId: Long): ResponseEntity<List<TaskDto>> {
         val tasks = taskService.getTasksByProjectId(projectId)
         return ResponseEntity.ok(tasks)
     }
 
-    @GetMapping("api/tasks/{id}")
-    fun getTask(@PathVariable id: Long): ResponseEntity<Task> {
+    @GetMapping("/{id}")
+    fun getTask(@PathVariable id: Long): ResponseEntity<TaskDto> {
         return taskService.getTaskById(id)
             ?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.notFound().build()
     }
 
-    @PostMapping("/api/tasks")
-    fun createTask(@Valid @RequestBody Task: TaskCreateDto): ResponseEntity<Task> {
-        val created = taskService.createTask(Task)
+    @PostMapping
+    fun createTask(@Valid @RequestBody taskDto: TaskCreateDto): ResponseEntity<TaskDto> {
+        val created = taskService.createTask(taskDto)
         return ResponseEntity
             .created(URI.create("/api/tasks/${created.id}"))
             .body(created)
     }
 
-    @PutMapping("/api/tasks/{id}")
+    @PutMapping("/{id}")
     fun updateTask(
         @PathVariable id: Long,
-        @Valid @RequestBody Task: TaskUpdateDto
-    ): ResponseEntity<Task> {
-        return taskService.updateTask(id, Task)
+        @Valid @RequestBody taskDto: TaskUpdateDto
+    ): ResponseEntity<TaskDto> {
+        return taskService.updateTask(id, taskDto)
             ?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.notFound().build()
     }
 
-    @DeleteMapping("/api/tasks/{id}")
+    @DeleteMapping("/{id}")
     fun deleteTask(@PathVariable id: Long): ResponseEntity<Void> {
         val deleted = taskService.deleteTask(id)
         return if (deleted) {
@@ -67,5 +66,30 @@ class TaskApiController(private val taskService: TaskService) {
         } else {
             ResponseEntity.notFound().build()
         }
+    }
+
+    @GetMapping("/project/{projectId}/dropdown")
+    fun getTasksForDropdown(@PathVariable projectId: Long): ResponseEntity<List<TaskDto>> {
+        // should be all the project tasks
+        val taskOptions = taskService.getTasksByProjectId(projectId)
+        return ResponseEntity.ok(taskOptions)
+    }
+
+    @GetMapping("/search")
+    fun searchTasks(
+        @RequestParam(required = false) projectId: Long?,
+        @RequestParam(required = false) query: String?
+    ): ResponseEntity<List<TaskDto>> {
+        val tasks = taskService.getTasksByProjectId(projectId!!).find {
+            it.name.contains(query ?: "", ignoreCase = true)
+        }!!.let { listOf(it) }
+        return ResponseEntity.ok(tasks)
+    }
+
+    @GetMapping("/{id}/progress")
+    fun getTaskProgress(@PathVariable id: Long): ResponseEntity<TaskProgressDto> {
+        return taskService.getTaskProgress(id)
+            ?.let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
     }
 }

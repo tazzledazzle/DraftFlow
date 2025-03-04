@@ -34,3 +34,11 @@ data class ProjectUpdateDto(
     @field:NotNull(message = "Project Manager ID is required")
     val projectManagerId: Long? = null
 )
+
+data class ProjectInfo(
+    val id: Long ,
+    val name : String,
+    val description: String? = null,
+    val startDate: LocalDate? = null,
+    val endDate : LocalDate? = null
+)

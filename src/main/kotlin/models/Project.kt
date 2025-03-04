@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity
@@ -30,10 +31,10 @@ data class Project (
     var description: String = "",
 
     @Column(name = "start_date")
-    var startDate:  LocalDateTime? = null,
+    var startDate:  LocalDate? = null,
 
     @Column(name = "end_date")
-    var endDate:  LocalDateTime? = null,
+    var endDate:  LocalDate? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_manager_id")

@@ -9,6 +9,7 @@ package controllers
 
 */
 
+import com.northshore.dto.TimesheetEntryDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -22,6 +23,7 @@ import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import services.TimesheetEntryService
 import java.time.LocalDate
 import java.util.*
 
@@ -32,7 +34,7 @@ import java.util.*
 @RestController
 @RequestMapping("/api/v1")
 @Tag(name = "Timesheet API", description = "API endpoints for timesheet management")
-class TimesheetController @Autowired constructor(private val timesheetService: TimesheetService) {
+class TimesheetController @Autowired constructor(private val timesheetService: TimesheetEntryService) {
     /**
      * Record a clock-in event for a worker
      */
@@ -100,10 +102,10 @@ class TimesheetController @Autowired constructor(private val timesheetService: T
     )
     fun getTimeEntry(
         @Parameter(description = "ID of the time entry to retrieve") @PathVariable timeEntryId: UUID?
-    ): ResponseEntity<TimeEntryDTO?> {
+    ): ResponseEntity<TimesheetEntryDto?> {
         log.info("Retrieving time entry: {}", timeEntryId)
-        val timeEntry: TimeEntryDTO? = timesheetService.getTimeEntry(timeEntryId)
-        return ResponseEntity.ok<TimeEntryDTO?>(timeEntry)
+        val timeEntry: TimesheetEntryDto? = timesheetService.getTimeEntryById(timeEntryId)
+        return ResponseEntity.ok<TimesheetEntryDto?>(timeEntry)
     }
 
     /**
