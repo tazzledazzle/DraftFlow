@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.Min
 import java.time.LocalDateTime
 
 @Entity
@@ -21,8 +23,15 @@ data class Task (
     var name: String = "",
     @Column
     var description: String = "",
-    @Column()
+    @Column
     var estimatedHours: Double = 0.0,
+    /**
+     * The percentage of the task that has been completed.
+     * This is a value between 0 and 100.
+     */
+    @Column
+    var progress: Double = 0.0,
+
     @Column(name = "created_at", nullable = false, updatable = false)
     var createdAt:  LocalDateTime? = null
 )

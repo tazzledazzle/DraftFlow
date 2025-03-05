@@ -1,5 +1,9 @@
 package com.northshore.controllers
 
+import com.northshore.dto.ExcelTokenRequest
+import com.northshore.dto.ExcelTokenResponse
+import com.northshore.dto.TokenValidationRequest
+import com.northshore.dto.TokenValidationResponse
 import com.northshore.services.JwtTokenService
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication
 import org.springframework.http.HttpStatus
@@ -31,7 +35,7 @@ class ExcelAuthController(
         // Generate Excel-specific token
         val token = jwtTokenService.generateExcelToken(request.projectId)
 
-        return ResponseEntity.ok(ExcelTokenResponse(token))
+        return ResponseEntity.ok(ExcelTokenResponse(token = token))
     }
 
     @PostMapping("/validate")

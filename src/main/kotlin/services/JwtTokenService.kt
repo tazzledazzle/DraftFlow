@@ -3,7 +3,7 @@ package com.northshore.services
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication
+import org.springframework.security.core.Authentication
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.stereotype.Service

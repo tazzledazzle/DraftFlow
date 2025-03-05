@@ -16,6 +16,7 @@ package controllers
 import com.northshore.dto.TaskHoursDto
 import dto.TaskCreateDto
 import dto.TaskDto
+import dto.TaskProgressDto
 import dto.TaskUpdateDto
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity

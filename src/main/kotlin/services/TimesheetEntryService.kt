@@ -29,6 +29,10 @@ interface TimesheetEntryService {
     fun deleteEntry(id: Long): Boolean
     fun getTimeEntryById(entryId: Long): TimesheetEntryDto
     fun getEntriesByProject(projectId: Long, startDate: LocalDate?, endDate: LocalDate?): List<TimesheetEntryDto>
+
+    fun updateTimeEntry(entryId: Long, entryDto: TimesheetEntryDto): TimesheetEntryDto
+    fun getTimesheet(timesheetId: Long): TimesheetEntryDto
+    fun submitTimesheet(entriesDto: List<TimesheetEntryDto>): List<TimesheetEntryDto>
 }
 @Service
 class TimesheetEntryServiceImpl(
@@ -105,7 +109,7 @@ class TimesheetEntryServiceImpl(
         }
 
         return timesheetEntryRepository.findByTaskId(taskId)
-            .map { it.toDto() }
+
     }
 
     override fun getTimesheetEntriesByProject(projectId: Long): List<TimesheetEntryDto> {
@@ -115,7 +119,7 @@ class TimesheetEntryServiceImpl(
         }
 
         return timesheetEntryRepository.findByProjectId(projectId)
-            .map { it.toDto() }
+
     }
 
     override fun getEntriesByDateRange(startDate: LocalDate, endDate: LocalDate): List<TimesheetEntryDto> {
@@ -125,7 +129,7 @@ class TimesheetEntryServiceImpl(
         }
 
         return timesheetEntryRepository.findByWorkDateBetween(startDate, endDate)
-            .map { it.toDto() }
+
     }
 
     fun getTaskHoursSummary(projectId: Long): List<TaskHoursDto> {
@@ -171,7 +175,7 @@ class TimesheetEntryServiceImpl(
         val entries = timesheetEntryRepository.findByProjectId(projectId)
 
         // Group by employee name and calculate total hours
-        return entries.groupBy { it.employeeName }
+        return entries.groupBy { it.username }
             .map { (employeeName, entries) ->
                 EmployeeHoursDto(
                     employeeName = employeeName,
@@ -198,11 +202,51 @@ class TimesheetEntryServiceImpl(
     ): List<TimesheetEntryDto> {
         val project = projectRepository.findById(projectId)
             .orElseThrow { ResourceNotFoundException("Project not found with id: $projectId") }
-        val entries = timesheetEntryRepository.findByProjectId(projectId)
+      return timesheetEntryRepository.findByProjectId(projectId)
+    }
+
+    override fun updateTimeEntry(
+        entryId: Long,
+        entryDto: TimesheetEntryDto
+    ): TimesheetEntryDto {
+        var entry = timesheetEntryRepository.findByIdOrNull(entryId)
+            ?: throw ResourceNotFoundException("Timesheet entry not found with id: $entryId")
+        entry = entry.copy(
+            taskId = entryDto.taskId,
+            employeeName = entryDto.username,
+            hoursWorked = entryDto.hoursWorked,
+            workDate = entryDto.workDate,
+            notes = entryDto.notes
+        )
+
+        val updatedEntry = timesheetEntryRepository.save(entry)
+
+        return updatedEntry.toDto()
+    }
+
+    override fun getTimesheet(timesheetId: Long): TimesheetEntryDto {
+        val entry = timesheetEntryRepository.findByIdOrNull(timesheetId)
+            ?: throw ResourceNotFoundException("Timesheet entry not found with id: $timesheetId")
+
+        return entry.toDto()
+    }
+
+    override fun submitTimesheet(entriesDto: List<TimesheetEntryDto>): List<TimesheetEntryDto> {
+        TODO("Not yet implemented")
     }
 
     override fun getTimeEntryById(entryId: Long): TimesheetEntryDto {
-        return timesheetEntryRepository.findByIdOrNull(entryId)
+
+        val entry = timesheetEntryRepository.findByIdOrNull(entryId)
+        return TimesheetEntryDto(
+            id = entry!!.id,
+            taskId = entry.taskId,
+            username = entry.employeeName,
+            hoursWorked = entry.hoursWorked,
+            workDate = entry.workDate,
+            notes = entry.notes,
+            submittedAt = entry.submittedAt
+        )
     }
 
 }

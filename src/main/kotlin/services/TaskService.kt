@@ -2,6 +2,7 @@ package services
 
 import dto.TaskCreateDto
 import dto.TaskDto
+import dto.TaskProgressDto
 import dto.TaskUpdateDto
 import models.Task
 import org.springframework.transaction.annotation.Transactional
@@ -18,6 +19,7 @@ interface TaskService {
     fun updateTask(projectId: Long, taskUpdateDto: TaskUpdateDto): TaskDto?
 
     fun deleteTask(taskId: Long) : Boolean
+    fun getTaskProgress(taskId: Long): TaskProgressDto
 }
 // todo: I need to figure out which id I want to use to manage these things, the project or task id
 open class TaskServiceImpl(private val projectRepository: ProjectRepository,
@@ -89,7 +91,20 @@ open class TaskServiceImpl(private val projectRepository: ProjectRepository,
     }
 
 
-}}
+}
+
+    override fun getTaskProgress(taskId: Long): TaskProgressDto {
+        val task = taskRepository.getTaskById(taskId)
+            ?: throw IllegalArgumentException("Task not found with ID: $taskId")
+        return TaskProgressDto(
+            id = task.id,
+            projectId = task.projectId,
+            name = task.name,
+            estimatedHours = task.estimatedHours,
+            progress = task.progress
+        )
+    }
+}
 
 fun Task.toDto(): TaskDto {
     return TaskDto(

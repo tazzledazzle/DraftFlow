@@ -1,9 +1,15 @@
 package com.northshore.controllers
 
+import com.northshore.dto.JwtResponse
+import com.northshore.dto.LoginRequest
+import com.northshore.dto.MessageResponse
+import com.northshore.dto.RegisterRequest
 import com.northshore.repository.UserRepository
 import com.northshore.services.JwtTokenService
+import com.northshore.services.UserDetailsImpl
 import jakarta.validation.Valid
 import models.User
+import models.UserRole
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -70,10 +76,10 @@ class AuthController(
 
         // Create new user
         val user = User(
-            username = registerRequest.username,
+            firstName = registerRequest.username,
             email = registerRequest.email,
             password = passwordEncoder.encode(registerRequest.password),
-            role = "PROJECT_MANAGER" // Default role for now
+            role = UserRole.PROJECT_MANAGER // Default role for now
         )
 
         userRepository.save(user)

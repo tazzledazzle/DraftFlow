@@ -60,10 +60,10 @@ data class ExcelTokenRequest(
 )
 
 data class ExcelTokenResponse(
-    val token: String,
-    val expiresIn : Long,
-    val projectId: Long,
-    val projectName: String
+    val token: String?,
+    val expiresIn : Long? = null,
+    val projectId: Long? = null,
+    val projectName: String? = null
 )
 
 data class TokenValidationRequest(

@@ -18,7 +18,6 @@ interface ProjectRepository : JpaRepository<Project, Long> {
     @Query("SELECT p FROM Project p WHERE p.startDate <= :date AND (p.endDate IS NULL OR p.endDate >= :date)")
     fun findActiveProjects(@Param("date") date: LocalDate): List<Project>
 
-    fun existsById(id: Long): Boolean
 }
 
 

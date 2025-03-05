@@ -1,5 +1,6 @@
 package com.northshore.services
 
+import com.northshore.controllers.ApplicationContextProvider
 import com.northshore.repository.UserRepository
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -14,7 +15,7 @@ class CustomUserDetailsService(
 
     @Transactional
     override fun loadUserByUsername(username: String): UserDetails {
-        val user = userRepository.findByUsername(username)
+        val user = userRepository.findByUsername(username).get()
             ?: throw UsernameNotFoundException("User not found with username: $username")
 
         return UserDetailsImpl(user)
@@ -33,7 +34,7 @@ class CustomUserDetailsService(
             // This is just for demonstration - in a real app you'd use a proper
             // service location mechanism
             val userRepository = ApplicationContextProvider.getBean(UserRepository::class.java)
-            val user = userRepository.findByUsername(username)
+            val user = userRepository.findByUsername(username).get()
                 ?: throw UsernameNotFoundException("User not found with username: $username")
 
             return UserDetailsImpl(user)
