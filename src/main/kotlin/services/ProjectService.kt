@@ -4,10 +4,10 @@ import com.northshore.repository.UserRepository
 import dto.ProjectCreateDto
 import dto.ProjectDto
 import dto.ProjectUpdateDto
-import models.Project
+import com.northshore.models.Project
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import repository.ProjectRepository
+import com.northshore.repository.ProjectRepository
 import java.time.LocalDate
 import java.time.LocalDateTime
 

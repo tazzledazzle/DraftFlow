@@ -1,8 +1,8 @@
 package services
 
+import com.northshore.models.Project
 import com.northshore.services.ProjectService
 import controllers.ProjectApiController
-import models.Project
 import org.mockito.Mockito.mock
 import java.time.LocalDate
 import java.time.LocalDateTime

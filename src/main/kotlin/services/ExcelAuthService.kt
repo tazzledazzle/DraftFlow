@@ -11,7 +11,7 @@ import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import repository.ProjectRepository
+import com.northshore.repository.ProjectRepository
 import java.util.*
 
 

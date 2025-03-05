@@ -8,8 +8,8 @@ import com.northshore.repository.UserRepository
 import com.northshore.services.JwtTokenService
 import com.northshore.services.UserDetailsImpl
 import jakarta.validation.Valid
-import models.User
-import models.UserRole
+import com.northshore.models.User
+import com.northshore.models.UserRole
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken

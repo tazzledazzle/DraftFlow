@@ -1,11 +1,15 @@
-import models.TimesheetEntry
+package com.northshore.repository
+
 import com.northshore.dto.TaskHoursDto
 import com.northshore.dto.TimesheetEntryDto
 import com.northshore.dto.WeeklyTimesheetDto
+import com.northshore.models.TimesheetEntry
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.repository.query.Param
+import org.springframework.stereotype.Repository
 import java.time.LocalDate
 
+@Repository
 interface TimesheetEntryRepository : JpaRepository<TimesheetEntry, Long> {
     fun findByTaskId(taskId: Long): List<TimesheetEntryDto>
 
@@ -21,5 +25,6 @@ interface TimesheetEntryRepository : JpaRepository<TimesheetEntry, Long> {
     fun getTaskHoursByProject(@Param("projectId") projectId: Long): List<TaskHoursDto>
 
     fun findByEmployeeNameAndWorkDateBetween(employeeName: String, weekStartDate: LocalDate, weekEndDate: LocalDate): List<WeeklyTimesheetDto>
+
 
 }

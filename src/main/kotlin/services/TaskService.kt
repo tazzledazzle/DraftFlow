@@ -4,10 +4,10 @@ import dto.TaskCreateDto
 import dto.TaskDto
 import dto.TaskProgressDto
 import dto.TaskUpdateDto
-import models.Task
+import com.northshore.models.Task
 import org.springframework.transaction.annotation.Transactional
-import repository.ProjectRepository
-import repository.TaskRepository
+import com.northshore.repository.ProjectRepository
+import com.northshore.repository.TaskRepository
 
 interface TaskService {
     fun getTasksByProjectId(projectId: Long) : List<TaskDto>

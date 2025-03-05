@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.validation.constraints.NotBlank
-import models.UserRole
+import com.northshore.models.UserRole
 import java.time.LocalDateTime
 
 data class UsersDto (

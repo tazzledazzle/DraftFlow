@@ -1,4 +1,4 @@
-package models
+package com.northshore.models
 
 enum class UserRole {
     ADMIN,

@@ -2,8 +2,8 @@ package services
 
 import dto.UsersCreateDto
 import dto.UsersUpdateDto
-import models.User
-import models.UserRole
+import com.northshore.models.User
+import com.northshore.models.UserRole
 import java.time.LocalDateTime
 
 class UserService {

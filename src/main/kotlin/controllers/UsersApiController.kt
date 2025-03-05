@@ -3,7 +3,7 @@ package controllers
 import dto.UsersCreateDto
 import dto.UsersUpdateDto
 import jakarta.validation.Valid
-import models.User
+import com.northshore.models.User
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import services.UserService
@@ -32,8 +32,7 @@ class UsersApiController(private val userService: UserService) {
 
     @GetMapping("/api/users/{id}")
     fun getUser(@PathVariable id: Long): ResponseEntity<User> {
-        return userService.getUserById(id)
-            ?.let { ResponseEntity.ok(it) }
+        return ResponseEntity.ok(userService.getUserById(id))
             ?: ResponseEntity.notFound().build()
     }
 
@@ -42,8 +41,7 @@ class UsersApiController(private val userService: UserService) {
         @PathVariable id: Long,
         @Valid @RequestBody usersDto: UsersUpdateDto
     ): ResponseEntity<User> {
-        return userService.updateUser(id, usersDto)
-            ?.let { ResponseEntity.ok(it) }
+        return ResponseEntity.ok(userService.updateUser(id, usersDto))
             ?: ResponseEntity.notFound().build()
     }
 

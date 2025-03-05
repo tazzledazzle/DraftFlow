@@ -1,9 +1,9 @@
 package com.northshore.repository
 
-import models.User
+import com.northshore.models.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import java.util.Optional
+import java.util.*
 
 /**
  * Repository interface for User entity access

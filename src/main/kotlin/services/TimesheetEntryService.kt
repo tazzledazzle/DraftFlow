@@ -1,6 +1,6 @@
-package services
+package com.northshore.services
 
-import TimesheetEntryRepository
+
 import com.northshore.dto.EmployeeHoursDto
 import com.northshore.dto.TaskHoursDto
 import com.northshore.dto.TimesheetApprovalRequest
@@ -12,12 +12,13 @@ import com.northshore.dto.TimesheetSubmissionRequest
 import com.northshore.dto.WeeklyTimesheetDto
 import com.northshore.exceptions.InvalidDataException
 import com.northshore.exceptions.ResourceNotFoundException
-import models.TimesheetEntry
+import com.northshore.models.TimesheetEntry
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import repository.ProjectRepository
-import repository.TaskRepository
+import com.northshore.repository.ProjectRepository
+import com.northshore.repository.TaskRepository
+import com.northshore.repository.TimesheetEntryRepository
 import java.time.LocalDate
 import java.time.LocalDateTime
 

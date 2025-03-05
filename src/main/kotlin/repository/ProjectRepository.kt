@@ -1,14 +1,13 @@
-package repository
+package com.northshore.repository
 
-import dto.TaskHoursDto
-import models.Project
-import models.Task
-import models.TimesheetEntry
+import com.northshore.models.Project
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
+import org.springframework.stereotype.Repository
 import java.time.LocalDate
 
+@Repository
 interface ProjectRepository : JpaRepository<Project, Long> {
     fun findByProjectManagerId(projectManagerId: Long): List<Project>
 

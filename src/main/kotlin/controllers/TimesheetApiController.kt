@@ -9,7 +9,7 @@ import jakarta.validation.Valid
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import services.TimesheetEntryService
+import com.northshore.services.TimesheetEntryService
 import java.net.URI
 import java.time.LocalDate
 
