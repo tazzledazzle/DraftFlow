@@ -13,6 +13,9 @@ data class User(
     var firstName: String = "",
     @Column
     var lastName: String = "",
+    @Column
+    var username: String = "",
+
     @Column(nullable = false)
     var email: String = "",
     @Column(nullable = false)

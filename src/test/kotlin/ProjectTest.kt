@@ -1,6 +1,6 @@
 import io.kotest.core.annotation.AutoScan
 import io.kotest.core.spec.style.ExpectSpec
-import models.Project
+import com.northshore.models.Project
 import services.ProjectTestController
 import java.time.LocalDateTime
 

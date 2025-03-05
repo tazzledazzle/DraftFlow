@@ -1,6 +1,7 @@
 package com.northshore.repository
 
 import com.northshore.models.User
+import com.northshore.models.UserRole
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.*
@@ -43,5 +44,5 @@ interface UserRepository : JpaRepository<User, Long> {
      * @param role The role to search for
      * @return List of users with this role
      */
-    fun findByRole(role: String): List<User>
+    fun findByRole(role: UserRole): List<User>
 }

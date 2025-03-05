@@ -4,8 +4,8 @@ CREATE TABLE projects
     project_manager_id BIGINT                                  NOT NULL,
     name               VARCHAR(255),
     description        VARCHAR(255),
-    start_date         TIMESTAMP WITHOUT TIME ZONE,
-    end_date           TIMESTAMP WITHOUT TIME ZONE,
+    start_date         date,
+    end_date           date,
     created_at         TIMESTAMP WITHOUT TIME ZONE             NOT NULL,
     CONSTRAINT pk_projects PRIMARY KEY (id)
 );
@@ -17,6 +17,7 @@ CREATE TABLE tasks
     name            VARCHAR(255),
     description     VARCHAR(255),
     estimated_hours DOUBLE PRECISION,
+    progress DOUBLE PRECISION,
     created_at      TIMESTAMP WITHOUT TIME ZONE             NOT NULL,
     CONSTRAINT pk_tasks PRIMARY KEY (id)
 );

@@ -1,7 +1,7 @@
 import io.kotest.core.annotation.AutoScan
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
-import models.Task
+import com.northshore.models.Task
 import java.time.LocalDateTime
 
 @AutoScan

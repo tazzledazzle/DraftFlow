@@ -1,5 +1,6 @@
 package com.northshore.models
 
+import dto.ProjectDto
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -19,12 +20,20 @@ data class TimesheetEntry(
     var taskId: Long = 0L, // todo: Task Object
     @Column(name = "employee_name")
     var employeeName: String = "",
+    @Column
+    var username: String = "",
     @Column(name = "hours_worked")
     var hoursWorked: Double = 0.0,
+    @Column
+    var weekStartDate: LocalDate,
+
+
     @Column(name = "work_date")
     var workDate: LocalDate = LocalDate.now(),
     @Column
     var notes: String? = "",
     @Column(name = "submitted_at")
     var submittedAt: LocalDateTime? = null
+
+
 )

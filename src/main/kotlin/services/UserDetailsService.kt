@@ -1,6 +1,7 @@
 package com.northshore.services
 
 import com.northshore.models.User
+import com.northshore.models.UserRole
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails

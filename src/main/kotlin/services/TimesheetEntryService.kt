@@ -83,10 +83,11 @@ class TimesheetEntryServiceImpl(
         // Create and save timesheet entry
         val entry = TimesheetEntry(
             taskId = task.id!!,
-            employeeName = entryDto.username,
+            username = entryDto.username,
             hoursWorked = entryDto.hoursWorked,
             workDate = entryDto.workDate,
             notes = entryDto.notes,
+            weekStartDate = taskRepository.getTaskById(entryDto.taskId)?.project?.startDate!!,
             submittedAt = LocalDateTime.now()
         )
 
@@ -118,10 +119,11 @@ class TimesheetEntryServiceImpl(
         val entries = entriesDto.map { entryDto ->
             TimesheetEntry(
                 taskId = entryDto.taskId,
-                employeeName = entryDto.username,
+                username = entryDto.username,
                 hoursWorked = entryDto.hoursWorked,
                 workDate = entryDto.workDate,
                 notes = entryDto.notes,
+                weekStartDate = taskRepository.getTaskById(entryDto.taskId)?.project?.startDate!!,
                 submittedAt = LocalDateTime.now()
             )
         }
@@ -136,7 +138,15 @@ class TimesheetEntryServiceImpl(
             throw ResourceNotFoundException("Task not found with id: $taskId")
         }
 
-        return timesheetEntryRepository.findByTaskId(taskId)
+        val task = taskRepository.findById(taskId)
+        .orElseThrow { ResourceNotFoundException("Task not found with id: $taskId") }
+
+        val entries = timesheetEntryRepository.findByTaskId(taskId)
+        val entriesInDateRange = entries.filter { entry ->
+            entry.workDate >= startDate && entry.workDate <= endDate
+        }
+
+        return entriesInDateRange
 
     }
 
@@ -166,7 +176,7 @@ class TimesheetEntryServiceImpl(
             throw ResourceNotFoundException("Project not found with id: $projectId")
         }
 
-        return timesheetEntryRepository.getTaskHoursByProject(projectId)
+        return timesheetEntryRepository.getTaskHoursByProjectId(projectId)
     }
 
     override fun getWeeklyTimesheet(employeeName: String, weekStartDate: LocalDate): WeeklyTimesheetDto {
@@ -251,7 +261,7 @@ class TimesheetEntryServiceImpl(
             ?: throw ResourceNotFoundException("Timesheet entry not found with id: $entryId")
         entry = entry.copy(
             taskId = entryDto.taskId,
-            employeeName = entryDto.username,
+            username = entryDto.username,
             hoursWorked = entryDto.hoursWorked,
             workDate = entryDto.workDate,
             notes = entryDto.notes
@@ -304,7 +314,7 @@ class TimesheetEntryServiceImpl(
         return TimesheetEntryDto(
             id = entry!!.id,
             taskId = entry.taskId,
-            username = entry.employeeName,
+            username = entry.username,
             hoursWorked = entry.hoursWorked,
             workDate = entry.workDate,
             notes = entry.notes,
@@ -318,7 +328,7 @@ class TimesheetEntryServiceImpl(
 fun TimesheetEntry.toDto(): TimesheetEntryDto = TimesheetEntryDto(
     id = this.id,
     taskId = 1L, //todo: pass in the Object
-    username = this.employeeName,
+    username = this.username,
     hoursWorked = this.hoursWorked,
     workDate = this.workDate,
     notes = this.notes,

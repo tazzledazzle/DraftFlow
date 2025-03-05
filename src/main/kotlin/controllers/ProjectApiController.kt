@@ -1,12 +1,12 @@
 package controllers
 
 /*
-            * Endpoint	Method	Description	Request	Response
-            /api/projects	GET	Get all projects	-	Array of ProjectDto
-            /api/projects	POST	Create new project	ProjectCreateDto	ProjectDto
-            /api/projects/{id}	GET	Get project by ID	-	ProjectDto
-            /api/projects/{id}	PUT	Update project	ProjectUpdateDto	ProjectDto
-            /api/projects/{id}	DELETE	Delete project	-	204 No Content
+* Endpoint	Method	Description	Request	Response
+/api/projects	GET	Get all projects	-	Array of ProjectDto
+/api/projects	POST	Create new project	ProjectCreateDto	ProjectDto
+/api/projects/{id}	GET	Get project by ID	-	ProjectDto
+/api/projects/{id}	PUT	Update project	ProjectUpdateDto	ProjectDto
+/api/projects/{id}	DELETE	Delete project	-	204 No Content
 *
 * */
 

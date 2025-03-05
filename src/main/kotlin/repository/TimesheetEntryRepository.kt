@@ -22,7 +22,7 @@ interface TimesheetEntryRepository : JpaRepository<TimesheetEntry, Long> {
 //            "WHERE t.project.id = :projectId " +
 //            "GROUP BY t.id, t.name " +
 //            "ORDER BY SUM(te.hoursWorked) DESC")
-    fun getTaskHoursByProject(@Param("projectId") projectId: Long): List<TaskHoursDto>
+    fun getTaskHoursByProjectId(@Param("projectId") projectId: Long): List<TaskHoursDto>
 
     fun findByEmployeeNameAndWorkDateBetween(employeeName: String, weekStartDate: LocalDate, weekEndDate: LocalDate): List<WeeklyTimesheetDto>
 

@@ -1,11 +1,7 @@
 package dto
 
-import jakarta.persistence.Column
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.validation.constraints.NotBlank
 import com.northshore.models.UserRole
+import jakarta.validation.constraints.NotBlank
 import java.time.LocalDateTime
 
 data class UsersDto (
