@@ -26,7 +26,7 @@ class CustomUserDetailsService(
          * Static method to be used in the JwtTokenFilter
          */
         @JvmStatic
-        fun loadUserByUsername(username: String): UserDetails {
+        fun loadUserDetails(username: String): UserDetails {
             // This is a static implementation for use in the filter
             // In a real implementation, we would use application context or another mechanism
             // to avoid this static approach

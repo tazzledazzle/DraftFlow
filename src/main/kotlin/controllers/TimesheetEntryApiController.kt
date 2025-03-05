@@ -9,9 +9,11 @@ package controllers
 
 */
 
+import com.northshore.dto.TimesheetApprovalRequest
 import com.northshore.dto.TimesheetDTO
 import com.northshore.dto.TimesheetEntryDto
 import com.northshore.dto.TimesheetEntryUpdateRequest
+import com.northshore.dto.TimesheetSubmissionRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -23,7 +25,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.format.annotation.DateTimeFormat
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import services.TimesheetEntryService
@@ -104,10 +105,10 @@ class TimesheetController @Autowired constructor(private val timesheetService: T
         ), ApiResponse(responseCode = "404", description = "Time entry not found")]
     )
     fun getTimeEntry(
-        @Parameter(description = "ID of the time entry to retrieve") @PathVariable timeEntryId: UUID?
+        @Parameter(description = "ID of the time entry to retrieve") @PathVariable timeEntryId: Long?
     ): ResponseEntity<TimesheetEntryDto?> {
         log.info("Retrieving time entry: {}", timeEntryId)
-        val timeEntry: TimesheetEntryDto? = timesheetService.getTimeEntryById(timeEntryId)
+        val timeEntry: TimesheetEntryDto? = timesheetService.getTimeEntryById(timeEntryId!!)
         return ResponseEntity.ok<TimesheetEntryDto?>(timeEntry)
     }
 
@@ -131,11 +132,11 @@ class TimesheetController @Autowired constructor(private val timesheetService: T
         )]
     )
     fun updateTimeEntry(
-        @Parameter(description = "ID of the time entry to update") @PathVariable timeEntryId: UUID?,
+        @Parameter(description = "ID of the time entry to update") @PathVariable timeEntryId: Long?,
         @Valid @RequestBody request: TimesheetEntryUpdateRequest?
     ): ResponseEntity<TimesheetEntryDto?> {
         log.info("Updating time entry: {}", timeEntryId)
-        val timeEntry: TimesheetEntryDto? = timesheetService.updateTimeEntry(timeEntryId, request)
+        val timeEntry: TimesheetEntryDto? = timesheetService.updateTimeEntry(timeEntryId!!, request!!)
         return ResponseEntity.ok<TimesheetEntryDto?>(timeEntry)
     }
 
@@ -152,7 +153,7 @@ class TimesheetController @Autowired constructor(private val timesheetService: T
         ), ApiResponse(responseCode = "409", description = "Cannot delete time entry in an approved timesheet")]
     )
     fun deleteTimeEntry(
-        @Parameter(description = "ID of the time entry to delete") @PathVariable timeEntryId: UUID?
+        @Parameter(description = "ID of the time entry to delete") @PathVariable timeEntryId: Long?
     ): ResponseEntity<Void?> {
         log.info("Deleting time entry: {}", timeEntryId)
         timesheetService.deleteTimeEntry(timeEntryId)
@@ -173,11 +174,11 @@ class TimesheetController @Autowired constructor(private val timesheetService: T
         ), ApiResponse(responseCode = "404", description = "Timesheet not found")]
     )
     fun getTimesheet(
-        @Parameter(description = "ID of the timesheet to retrieve") @PathVariable timesheetId: UUID?
-    ): ResponseEntity<TimesheetDTO?> {
+        @Parameter(description = "ID of the timesheet to retrieve") @PathVariable timesheetId: Long?
+    ): ResponseEntity<TimesheetEntryDto?> {
         log.info("Retrieving timesheet: {}", timesheetId)
-        val timesheet: TimesheetDTO? = timesheetService.getTimesheet(timesheetId)
-        return ResponseEntity.ok<TimesheetDTO?>(timesheet)
+        val timesheet: TimesheetEntryDto = timesheetService.getTimesheet(timesheetId)
+        return ResponseEntity.ok<TimesheetEntryDto?>(timesheet)
     }
 
     /**
@@ -190,11 +191,11 @@ class TimesheetController @Autowired constructor(private val timesheetService: T
         responses = [ApiResponse(
             responseCode = "200",
             description = "Timesheets retrieved successfully",
-            content = Content(schema = Schema(implementation = TimesheetDTO::class))
+            content = arrayOf(Content(schema = Schema(implementation = TimesheetDTO::class)))
         ), ApiResponse(responseCode = "400", description = "Invalid request parameters")]
     )
     fun getEmployeeTimesheets(
-        @Parameter(description = "ID of the employee") @PathVariable employeeId: UUID?,
+        @Parameter(description = "ID of the employee") @PathVariable employeeId: Long?,
         @Parameter(description = "Start date (inclusive)") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) startDate: LocalDate?,
         @Parameter(description = "End date (inclusive)") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) endDate: LocalDate?
     ): ResponseEntity<MutableList<TimesheetDTO?>?> {
@@ -202,8 +203,7 @@ class TimesheetController @Autowired constructor(private val timesheetService: T
             "Retrieving timesheets for employee: {} between dates: {} and {}",
             employeeId, startDate, endDate
         )
-        val timesheets: MutableList<TimesheetDTO?>? = timesheetService
-            .getTimesheetsByEmployeeAndDateRange(employeeId, startDate, endDate)
+        val timesheets: MutableList<TimesheetDTO?>? = timesheetService.getTimesheetsByEmployeeAndDateRange(employeeId, startDate, endDate)
         return ResponseEntity.ok<MutableList<TimesheetDTO?>?>(timesheets)
     }
 
@@ -217,7 +217,7 @@ class TimesheetController @Autowired constructor(private val timesheetService: T
         responses = [ApiResponse(
             responseCode = "200",
             description = "Timesheet submitted successfully",
-            content = Content(schema = Schema(implementation = TimesheetDTO::class))
+            content = arrayOf(Content(schema = Schema(implementation = TimesheetDTO::class)))
         ), ApiResponse(
             responseCode = "400",
             description = "Invalid request parameters"
@@ -227,7 +227,7 @@ class TimesheetController @Autowired constructor(private val timesheetService: T
         )]
     )
     fun submitTimesheet(
-        @Parameter(description = "ID of the timesheet to submit") @PathVariable timesheetId: UUID?,
+        @Parameter(description = "ID of the timesheet to submit") @PathVariable timesheetId: Long?,
         @Valid @RequestBody request: TimesheetSubmissionRequest?
     ): ResponseEntity<TimesheetDTO?> {
         log.info("Submitting timesheet: {}", timesheetId)
@@ -259,7 +259,7 @@ class TimesheetController @Autowired constructor(private val timesheetService: T
         @Valid @RequestBody request: TimesheetApprovalRequest?
     ): ResponseEntity<TimesheetDTO?> {
         log.info("Approving timesheet: {}", timesheetId)
-        val timesheet: TimesheetDTO? = timesheetService.approveTimesheet(timesheetId, request)
+        val timesheet: TimesheetDTO? = timesheetService.approveTimesheet(timesheetId as Long?, request)
         return ResponseEntity.ok<TimesheetDTO?>(timesheet)
     }
 

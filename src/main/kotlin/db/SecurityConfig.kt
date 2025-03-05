@@ -1,10 +1,8 @@
 package com.northshore.db
 
+import com.northshore.services.CustomUserDetailsService
 import com.northshore.services.JwtTokenService
-import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain
-import jakarta.servlet.ServletRequest
-import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.context.annotation.Bean
@@ -103,7 +101,7 @@ class JwtTokenFilter(private val jwtTokenService: JwtTokenService) : OncePerRequ
         // Regular web authentication
         val username = jwtTokenService.getUsernameFromToken(token)
         if (username != null) {
-            val userDetails = CustomUserDetailsService.loadUserByUsername(username)
+            val userDetails = CustomUserDetailsService.loadUserDetails(username)
             val authentication = UsernamePasswordAuthenticationToken(
                 userDetails, null, userDetails.authorities
             )

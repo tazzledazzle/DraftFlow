@@ -6,8 +6,6 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import jakarta.validation.constraints.Max
-import jakarta.validation.constraints.Min
 import java.time.LocalDateTime
 
 @Entity
@@ -30,8 +28,8 @@ data class Task (
      * This is a value between 0 and 100.
      */
     @Column
-    var progress: Double = 0.0,
+    var progress: Double? = 0.0,
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    var createdAt:  LocalDateTime? = null
+    var createdAt: LocalDateTime? = null
 )

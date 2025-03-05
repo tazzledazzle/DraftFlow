@@ -107,8 +107,8 @@ class ProjectServiceImpl(
         val project = Project(
             name = projectDto.name,
             description = projectDto.description!!,
-            startDate = projectDto.startDate,
-            endDate = projectDto.endDate
+            startDate = projectDto.startDate as LocalDate?,
+            endDate = projectDto.endDate as LocalDate?
         )
 
         // Associate project manager if provided
@@ -136,8 +136,8 @@ class ProjectServiceImpl(
             // Update project properties
             project.name = projectDto.name
             project.description = projectDto.description!!
-            project.startDate = projectDto.startDate
-            project.endDate = projectDto.endDate
+            project.startDate = projectDto.startDate as LocalDate?
+            project.endDate = projectDto.endDate as LocalDate?
 
             // Update project manager if provided
             projectDto.projectManagerId?.let { pmId ->
@@ -192,8 +192,8 @@ class ProjectServiceImpl(
             id = this.id,
             name = this.name,
             description = this.description,
-            startDate = this.startDate,
-            endDate = this.endDate,
+            startDate = this.startDate as LocalDateTime?,
+            endDate = this.endDate as LocalDateTime?,
             projectManagerId = this.projectManager?.id,
             taskCount = this.tasks.size,
             createdAt = this.createdAt

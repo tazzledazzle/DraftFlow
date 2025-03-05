@@ -1,8 +1,10 @@
 package com.northshore.controllers
 
 
+import com.northshore.dto.TaskHoursDto
 import com.northshore.dto.TimesheetEntryDto
 import com.northshore.dto.TimesheetSubmitDto
+import com.northshore.dto.WeeklyTimesheetDto
 import jakarta.validation.Valid
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.ResponseEntity
@@ -47,7 +49,7 @@ class TimesheetApiController(private val timesheetService: TimesheetEntryService
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) startDate: LocalDate?,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) endDate: LocalDate?
     ): ResponseEntity<List<TimesheetEntryDto>> {
-        val entries = timesheetService.getEntriesByTask(taskId, startDate, endDate)
+        val entries = timesheetService.getTimesheetEntriesByTask(taskId, startDate, endDate)
         return ResponseEntity.ok(entries)
     }
 
@@ -56,14 +58,14 @@ class TimesheetApiController(private val timesheetService: TimesheetEntryService
         @PathVariable employeeName: String,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) startDate: LocalDate?,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) endDate: LocalDate?
-    ): ResponseEntity<List<TimesheetEntryDto>> {
-        val entries = timesheetService.getEntriesByEmployee(employeeName, startDate, endDate)
+    ): ResponseEntity<WeeklyTimesheetDto> {
+        val entries = timesheetService.getWeeklyTimesheet(employeeName, startDate!!)
         return ResponseEntity.ok(entries)
     }
 
     @GetMapping("/{id}")
     fun getEntryById(@PathVariable id: Long): ResponseEntity<TimesheetEntryDto> {
-        return timesheetService.getEntryById(id)
+        return timesheetService.getTimeEntryById(id)
             ?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.notFound().build()
     }
@@ -83,13 +85,13 @@ class TimesheetApiController(private val timesheetService: TimesheetEntryService
         @PathVariable projectId: Long,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) startDate: LocalDate?,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) endDate: LocalDate?
-    ): ResponseEntity<TimesheetSummaryDto> {
+    ): ResponseEntity<WeeklyTimesheetDto> {
         val summary = timesheetService.getProjectTimesheetSummary(projectId, startDate, endDate)
         return ResponseEntity.ok(summary)
     }
 
     @GetMapping("/project/{projectId}/task-summary")
-    fun getTaskHoursByProject(@PathVariable projectId: Long): ResponseEntity<List<TaskHoursDto>> {
+    fun getTaskHoursByProject(@PathVariable projectId: Long): ResponseEntity<Unit?> {
         val taskHours = timesheetService.getTaskHoursByProject(projectId)
         return ResponseEntity.ok(taskHours)
     }

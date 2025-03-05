@@ -97,11 +97,11 @@ open class TaskServiceImpl(private val projectRepository: ProjectRepository,
         val task = taskRepository.getTaskById(taskId)
             ?: throw IllegalArgumentException("Task not found with ID: $taskId")
         return TaskProgressDto(
-            id = task.id,
+            id = task.id!!,
             projectId = task.projectId,
             name = task.name,
             estimatedHours = task.estimatedHours,
-            progress = task.progress
+            progress = task.progress!!
         )
     }
 }

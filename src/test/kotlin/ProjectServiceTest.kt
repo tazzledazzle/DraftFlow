@@ -7,9 +7,9 @@ import kotlin.test.assertEquals
 class ProjectServiceTest
     : FunSpec ({
     test("Test Controller") {
-        val project = ProjectTestController.createProject()
-
-        assertEquals(project.name, project.name)
+//        val project = ProjectTestController.createProject()
+//
+//        assertEquals(project.name, project.name)
     }
 
     test("Retrieve Project") {

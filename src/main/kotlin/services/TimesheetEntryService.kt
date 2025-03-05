@@ -3,8 +3,12 @@ package services
 import TimesheetEntryRepository
 import com.northshore.dto.EmployeeHoursDto
 import com.northshore.dto.TaskHoursDto
+import com.northshore.dto.TimesheetApprovalRequest
+import com.northshore.dto.TimesheetDTO
 import com.northshore.dto.TimesheetSubmitDto
 import com.northshore.dto.TimesheetEntryDto
+import com.northshore.dto.TimesheetEntryUpdateRequest
+import com.northshore.dto.TimesheetSubmissionRequest
 import com.northshore.dto.WeeklyTimesheetDto
 import com.northshore.exceptions.InvalidDataException
 import com.northshore.exceptions.ResourceNotFoundException
@@ -21,7 +25,7 @@ import java.time.LocalDateTime
 interface TimesheetEntryService {
     fun submitTimesheetEntry(entryDto: TimesheetSubmitDto): TimesheetEntryDto
     fun submitTimesheetBatch(batchDto: List<TimesheetEntryDto>): List<TimesheetEntryDto>
-    fun getTimesheetEntriesByTask(taskId: Long): List<TimesheetEntryDto>
+    fun getTimesheetEntriesByTask(taskId: Long, startDate: LocalDate?, endDate: LocalDate?): List<TimesheetEntryDto>
     fun getTimesheetEntriesByProject(projectId: Long): List<TimesheetEntryDto>
     fun getWeeklyTimesheet(employeeName: String, weekStartDate: LocalDate): WeeklyTimesheetDto
     fun getEntriesByDateRange(startDate: LocalDate, endDate: LocalDate): List<TimesheetEntryDto>
@@ -30,10 +34,33 @@ interface TimesheetEntryService {
     fun getTimeEntryById(entryId: Long): TimesheetEntryDto
     fun getEntriesByProject(projectId: Long, startDate: LocalDate?, endDate: LocalDate?): List<TimesheetEntryDto>
 
-    fun updateTimeEntry(entryId: Long, entryDto: TimesheetEntryDto): TimesheetEntryDto
-    fun getTimesheet(timesheetId: Long): TimesheetEntryDto
-    fun submitTimesheet(entriesDto: List<TimesheetEntryDto>): List<TimesheetEntryDto>
+    fun updateTimeEntry(entryId: Long, entryDto: TimesheetEntryUpdateRequest): TimesheetEntryDto
+    fun getTimesheet(timesheetId: Long?): TimesheetEntryDto
+    fun submitTimesheet(timesheetId: Long?, entriesDto: TimesheetSubmissionRequest?): TimesheetDTO?
+    fun approveTimesheet(timesheetId: Long?, request: TimesheetApprovalRequest?): TimesheetDTO?
+    fun getTimesheetsByEmployeeAndDateRange(
+        employeeId: Long?,
+        startDate: LocalDate?,
+        endDate: LocalDate?
+    ): MutableList<TimesheetDTO?>? {
+        TODO("Not yet implemented")
+    }
+
+    fun deleteTimeEntry(uUID: Long?) {
+        TODO("Not yet implemented")
+    }
+
+    fun updateTimeEntry(
+        entryId: Long,
+        entryDto: TimesheetEntryDto
+    ): TimesheetEntryDto
+
+    fun getProjectTimesheetSummary(projectId: Long, startDate: LocalDate?, date: LocalDate?) : WeeklyTimesheetDto
+    fun getTaskHoursByProject(lng: Long) {
+        TODO("Not yet implemented")
+    }
 }
+
 @Service
 class TimesheetEntryServiceImpl(
     private val timesheetEntryRepository: TimesheetEntryRepository,
@@ -102,7 +129,7 @@ class TimesheetEntryServiceImpl(
         return savedEntries.map { it.toDto() }
     }
 
-    override fun getTimesheetEntriesByTask(taskId: Long): List<TimesheetEntryDto> {
+    override fun getTimesheetEntriesByTask(taskId: Long, startDate: LocalDate?, endDate: LocalDate?): List<TimesheetEntryDto> {
         // Check if task exists
         if (!taskRepository.existsById(taskId)) {
             throw ResourceNotFoundException("Task not found with id: $taskId")
@@ -146,7 +173,8 @@ class TimesheetEntryServiceImpl(
         val weekEndDate = weekStartDate.plusDays(6)
 
         // Fetch all timesheet entries for the employee within the week
-        val entries = timesheetEntryRepository.findByEmployeeNameAndWorkDateBetween(employeeName, weekStartDate, weekEndDate)
+        val entries =
+            timesheetEntryRepository.findByEmployeeNameAndWorkDateBetween(employeeName, weekStartDate, weekEndDate)
 
         // Calculate total hours worked for the week
         val totalHours = entries.sumOf { it.hoursWorked }
@@ -155,7 +183,7 @@ class TimesheetEntryServiceImpl(
             hoursWorked = totalHours,
             taskId = entries.firstOrNull()?.taskId ?: 0,
             employeeName = employeeName,
-            workDate =  LocalDateTime.now(),
+            workDate = LocalDateTime.now(),
             weekStartDate = weekStartDate,
             weekEndDate = weekEndDate,
             totalHours = totalHours,
@@ -202,10 +230,19 @@ class TimesheetEntryServiceImpl(
     ): List<TimesheetEntryDto> {
         val project = projectRepository.findById(projectId)
             .orElseThrow { ResourceNotFoundException("Project not found with id: $projectId") }
-      return timesheetEntryRepository.findByProjectId(projectId)
+        return timesheetEntryRepository.findByProjectId(projectId)
     }
 
     override fun updateTimeEntry(
+        entryId: Long,
+        entryDto: TimesheetEntryUpdateRequest
+    ): TimesheetEntryDto {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateTimeEntry(
+
+
         entryId: Long,
         entryDto: TimesheetEntryDto
     ): TimesheetEntryDto {
@@ -224,14 +261,39 @@ class TimesheetEntryServiceImpl(
         return updatedEntry.toDto()
     }
 
-    override fun getTimesheet(timesheetId: Long): TimesheetEntryDto {
+    override fun getProjectTimesheetSummary(
+        projectId: Long,
+        startDate: LocalDate?,
+        date: LocalDate?
+    ): WeeklyTimesheetDto {
+        TODO("Not yet implemented")
+    }
+
+    override fun getTimesheet(timesheetId: Long?): TimesheetEntryDto {
         val entry = timesheetEntryRepository.findByIdOrNull(timesheetId)
             ?: throw ResourceNotFoundException("Timesheet entry not found with id: $timesheetId")
 
         return entry.toDto()
     }
 
-    override fun submitTimesheet(entriesDto: List<TimesheetEntryDto>): List<TimesheetEntryDto> {
+    override fun submitTimesheet(timesheetId: Long?, entriesDto: TimesheetSubmissionRequest?): TimesheetDTO? {
+        val projectName = null
+        val employeeName = ""
+        return TimesheetDTO(
+            id = 1L,
+            projectId = 1L,
+            entries = entriesDto as List<TimesheetSubmissionRequest>?,
+            projectName = projectName,
+            employeeName = employeeName,
+            periodStartDate = LocalDate.now(),
+            periodEndDate = LocalDate.of(2021, 1, 1),
+        )
+    }
+
+    override fun approveTimesheet(
+        timesheetId: Long?,
+        request: TimesheetApprovalRequest?
+    ): TimesheetDTO? {
         TODO("Not yet implemented")
     }
 
