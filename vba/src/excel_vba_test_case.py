@@ -1,7 +1,7 @@
 import unittest
-import xlwings as xw
-import os
-from excel_vba_testing import ExcelVBATestSetup
+
+from excel_vba_setup import ExcelVBATestSetup
+
 
 class ExcelVBATestCase(unittest.TestCase):
     """Base class for Excel VBA tests"""
@@ -18,7 +18,7 @@ class ExcelVBATestCase(unittest.TestCase):
 
     def tearDown(self):
         """Clean up after each test"""
-        if hasattr(self, 'excel'):
+        if hasattr(self, "excel"):
             self.excel.teardown()
 
     def run_macro(self, macro_name, *args):
@@ -43,15 +43,25 @@ class ExcelVBATestCase(unittest.TestCase):
     def assert_cell_value(self, sheet_name, cell_address, expected_value, msg=None):
         """Assert that a cell contains the expected value"""
         actual_value = self.get_cell_value(sheet_name, cell_address)
-        self.assertEqual(actual_value, expected_value,
-                         msg or f"Cell {sheet_name}!{cell_address} value doesn't match expected value")
+        self.assertEqual(
+            actual_value,
+            expected_value,
+            msg
+            or f"Cell {sheet_name}!{cell_address} value doesn't match expected value",
+        )
 
-    def assert_cell_value_approx(self, sheet_name, cell_address, expected_value,
-                                 places=7, msg=None):
+    def assert_cell_value_approx(
+        self, sheet_name, cell_address, expected_value, places=7, msg=None
+    ):
         """Assert that a numeric cell value is approximately equal to expected value"""
         actual_value = self.get_cell_value(sheet_name, cell_address)
-        self.assertAlmostEqual(actual_value, expected_value, places=places,
-                               msg=msg or f"Cell {sheet_name}!{cell_address} value not approximately equal")
+        self.assertAlmostEqual(
+            actual_value,
+            expected_value,
+            places=places,
+            msg=msg
+            or f"Cell {sheet_name}!{cell_address} value not approximately equal",
+        )
 
     def assert_range_values(self, sheet_name, range_address, expected_values, msg=None):
         """Assert that a range of cells contains the expected values"""
@@ -71,7 +81,13 @@ class ExcelVBATestCase(unittest.TestCase):
             expected_values = [expected_values]
 
         # Compare row by row
-        for i, (actual_row, expected_row) in enumerate(zip(actual_values, expected_values)):
+        for i, (actual_row, expected_row) in enumerate(
+            zip(actual_values, expected_values)
+        ):
             for j, (actual, expected) in enumerate(zip(actual_row, expected_row)):
-                self.assertEqual(actual, expected,
-                                 msg or f"Value mismatch at row {i+1}, column {j+1} in range {sheet_name}!{range_address}")
+                self.assertEqual(
+                    actual,
+                    expected,
+                    msg
+                    or f"Value mismatch at row {i+1}, column {j+1} in range {sheet_name}!{range_address}",
+                )

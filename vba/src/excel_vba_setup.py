@@ -7,6 +7,7 @@ import xlwings as xw
 import time
 import sys
 
+
 class ExcelVBATestSetup:
     """Helper class to set up and tear down Excel for testing"""
 
