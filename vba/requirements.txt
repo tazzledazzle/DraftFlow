@@ -1,4 +1,6 @@
 pandas
-unittest
+numpy
+datetime
 black
 xlwings
+openpyxl
