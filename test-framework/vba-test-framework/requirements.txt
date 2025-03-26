@@ -1,0 +1,5 @@
+# xlwings==0.33.11
+pandas
+openpyxl 
+pytest
+black

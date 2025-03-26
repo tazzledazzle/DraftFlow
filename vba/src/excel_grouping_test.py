@@ -40,12 +40,6 @@ class GroupingTest(ExcelVBATestCase):
         print(task_groups)
         out_book = xlwings.Book("../tests/TestXLWingsSheet.xlsm")
         job_track_sheet = out_book.sheets("Job Cost Tracking")
-        # new_sheet = book.sheets.add("Task Groups")
-        # book.save()
-        # new_sheet.range("A1").value = "Task Group"
-        # new_sheet.range("B1").value = "Hours"
-        # new_sheet.range("C1").value = "Estimate"
-        # new_sheet.range("D1").value = "TaskId"
 
         i = 2
         for key, task in task_groups.items():
