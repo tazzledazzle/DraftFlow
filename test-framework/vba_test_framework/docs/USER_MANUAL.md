@@ -10,7 +10,7 @@ First, install the framework from your local directory:
 
 ```bash
 # Navigate to the directory where you placed the code
-cd path/to/vba-test-framework
+cd path/to/vba_test_framework
 
 # Install in development mode
 pip install -e .

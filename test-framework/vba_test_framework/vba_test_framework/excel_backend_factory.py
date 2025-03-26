@@ -1,7 +1,7 @@
 import logging
 from typing import Literal, Union, Optional
 
-from vba_test_framework import ExcelApplication, VBATestException
+from vba_test_framework.vba_test_framework.excel_backend_factory import ExcelApplication, VBATestException
 
 class ExcelBackendFactory:
     """Factory class for creating Excel application backend instances"""

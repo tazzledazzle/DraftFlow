@@ -13,12 +13,13 @@ import glob
 # Add parent directory to path for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
+print(parent_dir)
 sys.path.append(parent_dir)
 
-from  vba_test_framework   import VBATestCase, VBATestSuite, create_test_suite_from_class
-from vba_recorder import VBARecorder
-from macro_detector import MacroDetector
-from excel_factory import ExcelBackendFactory
+from  vba_test_framework.vba_test_framework.core   import VBATestCase, VBATestSuite, create_test_suite_from_class
+from vba_test_framework.vba_test_framework.recorder import VBARecorder
+from vba_test_framework.vba_test_framework.vba_macro_detector import MacroDetector
+from vba_test_framework.vba_test_framework.excel_backend_factory import ExcelBackendFactory
 
 def setup_logging(verbose):
     """Set up logging based on verbosity level"""

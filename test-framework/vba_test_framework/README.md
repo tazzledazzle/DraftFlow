@@ -21,8 +21,8 @@ A Python framework for automated testing of VBA macros in Excel workbooks.
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/vba-test-framework.git
-cd vba-test-framework
+git clone https://github.com/yourusername/vba_test_framework.git
+cd vba_test_framework
 
 # Install the package
 pip install -e .
@@ -96,7 +96,7 @@ vbatest run -d tests -t MySpecificTest -e "C:\path\to\your\workbook.xlsx" -r rep
 ## Project Structure
 
 ```
-vba-test-framework/
+vba_test_framework/
 ├── vba_test_framework/
 │   ├── __init__.py
 │   ├── core.py                   # Main framework classes

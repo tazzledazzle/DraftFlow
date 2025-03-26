@@ -1,12 +1,11 @@
-import os
-import time
 import logging
+import os
+from typing import Any, List
+
 import pandas as pd
-from typing import Any, Dict, List, Optional, Union
 import xlwings as xw
 
-from vba_test_framework import VBATestException
-
+from vba_test_framework.core import VBATestException, ExcelApplication
 class XlwingsExcelApplication:
     """Excel application wrapper using xlwings"""
     
