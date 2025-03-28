@@ -38,152 +38,26 @@ def create_timesheet(ws):
         ws.column_dimensions[get_column_letter(col_idx)].width = width
 
     # Define styles
-    thin_border = Border(
-        left=Side(style='thin'),
-        right=Side(style='thin'),
-        top=Side(style='thin'),
-        bottom=Side(style='thin')
-    )
-
-    header_font = Font(name='Arial', size=14, bold=True, color='000080')
-    subheader_font = Font(name='Arial', size=10, bold=True)
-    normal_font = Font(name='Arial', size=10)
-
-    center_align = Alignment(horizontal='center', vertical='center')
-    left_align = Alignment(horizontal='left', vertical='center')
-
-    header_fill = PatternFill(start_color='D0D0D0', end_color='D0D0D0', fill_type='solid')
-    button_fill = PatternFill(start_color='4472C4', end_color='4472C4', fill_type='solid')
-    green_fill = PatternFill(start_color='92D050', end_color='92D050', fill_type='solid')
-    red_fill = PatternFill(start_color='FF0000', end_color='FF0000', fill_type='solid')
-    gray_fill = PatternFill(start_color='BBBBBB', end_color='BBBBBB', fill_type='solid')
+    (button_fill, center_align, gray_fill, green_fill, header_fill, header_font, left_align,
+     normal_font, red_fill, subheader_font, thin_border) = define_styles()
 
     # Company header
-    ws['A1'] = "NORTHSHORE EXTERIORS"
-    ws['A1'].font = header_font
-    ws.merge_cells('A1:O1')
-    ws['A1'].alignment = center_align
+    company_header(center_align, header_font, ws)
 
     # Foreman and Job info
-    ws['A2'] = "Foreman:"
-    ws['A2'].font = subheader_font
-    ws['A2'].alignment = left_align
-
-    ws['C2'] = "GREIN, CHRISTOPHER"
-    ws['C2'].font = normal_font
-    ws['C2'].border = thin_border
-    ws.merge_cells('C2:D2')
-
-    ws['E2'] = "Job #"
-    ws['E2'].font = subheader_font
-    ws['E2'].alignment = center_align
-
-    ws['F2'] = 0
-    ws['F2'].font = normal_font
-    ws['F2'].border = thin_border
-    ws['F2'].alignment = center_align
-
-    ws['I2'] = "Shift Type"
-    ws['I2'].font = subheader_font
-    ws['I2'].alignment = center_align
-
-    ws['M2'] = "Day_S-8"
-    ws['M2'].font = normal_font
-    ws['M2'].alignment = center_align
-
-    ws['O2'] = "FALSE"
-    ws['O2'].font = normal_font
-    ws['O2'].alignment = center_align
+    foreman_and_job_info(center_align, left_align, normal_font, subheader_font, thin_border, ws)
 
     # Week start info
-    ws['A3'] = "Week Start Monday:"
-    ws['A3'].font = subheader_font
-    ws['A3'].alignment = left_align
-
-    ws['C3'] = "3/24/25"
-    ws['C3'].font = normal_font
-    ws['C3'].border = thin_border
-    ws['C3'].alignment = center_align
-
-    ws['E3'] = "Project"
-    ws['E3'].font = subheader_font
-    ws['E3'].alignment = center_align
-
-    ws['F3'] = 0
-    ws['F3'].font = normal_font
-    ws['F3'].border = thin_border
-    ws['F3'].alignment = center_align
-
-    ws['I3'] = "GC"
-    ws['I3'].font = subheader_font
-    ws['I3'].alignment = center_align
+    week_start_info(center_align, left_align, normal_font, subheader_font, thin_border, ws)
 
     # Days of the week header
-    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-
-    # Monday through Friday (columns C-L)
-    for i in range(5):  # 0-4 for Monday-Friday
-        day_col = chr(ord('C') + i*2)  # C, E, G, I, K
-
-        # Set day name
-        ws[f"{day_col}4"] = days[i]
-        ws[f"{day_col}4"].font = subheader_font
-        ws[f"{day_col}4"].border = thin_border
-        ws[f"{day_col}4"].alignment = center_align
-
-        # REG column
-        ws[f"{day_col}5"] = "REG"
-        ws[f"{day_col}5"].font = normal_font
-        ws[f"{day_col}5"].border = thin_border
-        ws[f"{day_col}5"].alignment = center_align
-
-        # OT column
-        ot_col = chr(ord(day_col) + 1)  # D, F, H, J, L
-        ws[f"{ot_col}5"] = "OT"
-        ws[f"{ot_col}5"].font = normal_font
-        ws[f"{ot_col}5"].border = thin_border
-        ws[f"{ot_col}5"].alignment = center_align
-
-    # Saturday (column M) - set values BEFORE merging
-    ws['M4'] = "Saturday"
-    ws['M4'].font = subheader_font
-    ws['M4'].border = thin_border
-    ws['M4'].alignment = center_align
-
-    # Set OT value
-    # We need a different approach for merged cells
-    # Create and style the cell first, with value
-    cell = ws.cell(row=5, column=13)  # M5
-    cell.value = "OT"
-    cell.font = normal_font
-    cell.border = thin_border
-    cell.alignment = center_align
-
-    # Now merge - the value will be retained in the top-left cell (M4)
-    ws.merge_cells('M4:M5')
-
-    # Sunday (column N) - set values BEFORE merging
-    ws['N4'] = "Sunday"
-    ws['N4'].font = subheader_font
-    ws['N4'].border = thin_border
-    ws['N4'].alignment = center_align
-
-    # Set DT value
-    cell = ws.cell(row=5, column=14)  # N5
-    cell.value = "DT"
-    cell.font = normal_font
-    cell.border = thin_border
-    cell.alignment = center_align
+    setup_days_of_the_week_headers(center_align, normal_font, subheader_font, thin_border, ws)
 
     # Now merge
     ws.merge_cells('N4:N5')
 
     # Add submit time button
-    ws['J1'] = "Submit Time"
-    ws['J1'].font = Font(bold=True, color="FFFFFF")
-    ws['J1'].fill = button_fill
-    ws['J1'].alignment = center_align
-    ws.merge_cells('J1:K1')
+    add_submit_time_button(button_fill, center_align, ws)
 
     # Hours Type headers
     ws['A5'] = "Hours Type"
@@ -523,6 +397,147 @@ def create_timesheet(ws):
     ws[f"Q{current_row}"].border = thin_border
     ws[f"Q{current_row}"].alignment = center_align
     ws[f"Q{current_row}"].fill = red_fill
+
+
+def add_submit_time_button(button_fill, center_align, ws):
+    ws['J1'] = "Submit Time"
+    ws['J1'].font = Font(bold=True, color="FFFFFF")
+    ws['J1'].fill = button_fill
+    ws['J1'].alignment = center_align
+    ws.merge_cells('J1:K1')
+
+
+def set_ot_value(center_align, normal_font, thin_border, ws):
+    # We need a different approach for merged cells
+    # Create and style the cell first, with value
+    cell = ws.cell(row=5, column=13)  # M5
+    cell.value = "OT"
+    cell.font = normal_font
+    cell.border = thin_border
+    cell.alignment = center_align
+    # Now merge - the value will be retained in the top-left cell (M4)
+    ws.merge_cells('M4:M5')
+
+
+def setup_days_of_the_week_headers(center_align, normal_font, subheader_font, thin_border, ws):
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    # Monday through Friday (columns C-L)
+    for i in range(5):  # 0-4 for Monday-Friday
+        day_col = chr(ord('C') + i * 2)  # C, E, G, I, K
+
+        # Set day name
+        ws[f"{day_col}4"] = days[i]
+        ws[f"{day_col}4"].font = subheader_font
+        ws[f"{day_col}4"].border = thin_border
+        ws[f"{day_col}4"].alignment = center_align
+
+        # REG column
+        ws[f"{day_col}5"] = "REG"
+        ws[f"{day_col}5"].font = normal_font
+        ws[f"{day_col}5"].border = thin_border
+        ws[f"{day_col}5"].alignment = center_align
+
+        # OT column
+        ot_col = chr(ord(day_col) + 1)  # D, F, H, J, L
+        ws[f"{ot_col}5"] = "OT"
+        ws[f"{ot_col}5"].font = normal_font
+        ws[f"{ot_col}5"].border = thin_border
+        ws[f"{ot_col}5"].alignment = center_align
+    # Saturday (column M) - set values BEFORE merging
+    ws['M4'] = "Saturday"
+    ws['M4'].font = subheader_font
+    ws['M4'].border = thin_border
+    ws['M4'].alignment = center_align
+
+    # Set OT value
+    set_ot_value(center_align, normal_font, thin_border, ws)
+
+    # Sunday (column N) - set values BEFORE merging
+    ws['N4'] = "Sunday"
+    ws['N4'].font = subheader_font
+    ws['N4'].border = thin_border
+    ws['N4'].alignment = center_align
+
+    # Set DT value
+    cell = ws.cell(row=5, column=14)  # N5
+    cell.value = "DT"
+    cell.font = normal_font
+    cell.border = thin_border
+    cell.alignment = center_align
+
+
+def week_start_info(center_align, left_align, normal_font, subheader_font, thin_border, ws):
+    ws['A3'] = "Week Start Monday:"
+    ws['A3'].font = subheader_font
+    ws['A3'].alignment = left_align
+    ws['C3'] = "3/24/25"
+    ws['C3'].font = normal_font
+    ws['C3'].border = thin_border
+    ws['C3'].alignment = center_align
+    ws['E3'] = "Project"
+    ws['E3'].font = subheader_font
+    ws['E3'].alignment = center_align
+    ws['F3'] = 0
+    ws['F3'].font = normal_font
+    ws['F3'].border = thin_border
+    ws['F3'].alignment = center_align
+    ws['I3'] = "GC"
+    ws['I3'].font = subheader_font
+    ws['I3'].alignment = center_align
+
+
+def foreman_and_job_info(center_align, left_align, normal_font, subheader_font, thin_border, ws):
+    ws['A2'] = "Foreman:"
+    ws['A2'].font = subheader_font
+    ws['A2'].alignment = left_align
+    ws['C2'] = "GREIN, CHRISTOPHER"
+    ws['C2'].font = normal_font
+    ws['C2'].border = thin_border
+    ws.merge_cells('C2:D2')
+    ws['E2'] = "Job #"
+    ws['E2'].font = subheader_font
+    ws['E2'].alignment = center_align
+    ws['F2'] = 0
+    ws['F2'].font = normal_font
+    ws['F2'].border = thin_border
+    ws['F2'].alignment = center_align
+    ws['I2'] = "Shift Type"
+    ws['I2'].font = subheader_font
+    ws['I2'].alignment = center_align
+    ws['M2'] = "Day_S-8"
+    ws['M2'].font = normal_font
+    ws['M2'].alignment = center_align
+    ws['O2'] = "FALSE"
+    ws['O2'].font = normal_font
+    ws['O2'].alignment = center_align
+
+
+def company_header(center_align, header_font, ws):
+    ws['A1'] = "NORTHSHORE EXTERIORS"
+    ws['A1'].font = header_font
+    ws.merge_cells('A1:O1')
+    ws['A1'].alignment = center_align
+
+
+def define_styles():
+    thin_border = Border(
+        left=Side(style='thin'),
+        right=Side(style='thin'),
+        top=Side(style='thin'),
+        bottom=Side(style='thin')
+    )
+    header_font = Font(name='Arial', size=14, bold=True, color='000080')
+    subheader_font = Font(name='Arial', size=10, bold=True)
+    normal_font = Font(name='Arial', size=10)
+    center_align = Alignment(horizontal='center', vertical='center')
+    left_align = Alignment(horizontal='left', vertical='center')
+    header_fill = PatternFill(start_color='D0D0D0', end_color='D0D0D0', fill_type='solid')
+    button_fill = PatternFill(start_color='4472C4', end_color='4472C4', fill_type='solid')
+    green_fill = PatternFill(start_color='92D050', end_color='92D050', fill_type='solid')
+    red_fill = PatternFill(start_color='FF0000', end_color='FF0000', fill_type='solid')
+    gray_fill = PatternFill(start_color='BBBBBB', end_color='BBBBBB', fill_type='solid')
+    return button_fill, center_align, gray_fill, green_fill, header_fill, header_font, left_align, normal_font, red_fill, subheader_font, thin_border
+
 
 def create_daily_report(ws):
     """Create the daily report layout."""
