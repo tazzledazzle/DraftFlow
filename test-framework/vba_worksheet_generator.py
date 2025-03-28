@@ -1,4 +1,5 @@
 import openpyxl
+import xlwings as xw
 from openpyxl.styles import Font, PatternFill, Border, Side, Alignment
 from openpyxl.utils import get_column_letter
 
@@ -8,15 +9,15 @@ def create_northshore_workbook(filename="northshore_exteriors_workbook.xlsx"):
     This version avoids all potential merged cell issues.
     """
     # Create a new workbook
-    wb = openpyxl.Workbook()
+    wb = xw.Book()
 
     # Set up the first sheet as TimeSheet
-    ws_timesheet = wb.active
+    ws_timesheet = wb.sheets[0]
     ws_timesheet.title = "TimeSheet"
     create_timesheet(ws_timesheet)
 
     # Create the daily report sheet
-    ws_daily = wb.create_sheet(title="Sheet1")
+    ws_daily = wb.sheets(title="Sheet1")
     create_daily_report(ws_daily)
 
     # Create other placeholder sheets seen in the tab bar
@@ -24,11 +25,11 @@ def create_northshore_workbook(filename="northshore_exteriors_workbook.xlsx"):
                  "Saturday", "Sunday", "Validation Table", "Job Cost Tracking"]
 
     for tab_name in tab_names:
-        wb.create_sheet(title=tab_name)
+        wb.sheets(title=tab_name)
 
     # Save workbook
     wb.save(filename)
-    print(f"Workbook saved as: {filename}")
+    print( f"Workbook saved as: {filename}")
     return filename
 
 def create_timesheet(ws):
@@ -89,12 +90,7 @@ def create_timesheet(ws):
 
     # Add subtotals row
     current_row += 1
-    for col_idx in range(3, 15):
-        col_letter = get_column_letter(col_idx)
-        ws[f"{col_letter}{current_row}"] = 0
-        ws[f"{col_letter}{current_row}"].font = normal_font
-        ws[f"{col_letter}{current_row}"].border = thin_border
-        ws[f"{col_letter}{current_row}"].alignment = center_align
+    add_subtotal_rows(center_align, current_row, normal_font, thin_border, ws)
 
     # Add Worker 2 - BURTT, AARON
     current_row += 2
@@ -103,25 +99,14 @@ def create_timesheet(ws):
     add_payroll_category_header(current_row, header_fill, subheader_font, ws)
 
     # Worker hours totals
-    ws[f"O{current_row}"] = 0
-    ws[f"O{current_row}"].font = normal_font
-    ws[f"O{current_row}"].border = thin_border
-    ws[f"O{current_row}"].alignment = center_align
-
-    ws[f"P{current_row}"] = 0
-    ws[f"P{current_row}"].font = normal_font
-    ws[f"P{current_row}"].border = thin_border
-    ws[f"P{current_row}"].alignment = center_align
+    add_worker_hours_totals(center_align, current_row, normal_font, thin_border, ws)
 
     # Add worker 2 tasks
     for i in range(3):
         current_row += 1
 
         # Task ID
-        ws[f"A{current_row}"] = 1
-        ws[f"A{current_row}"].font = normal_font
-        ws[f"A{current_row}"].border = thin_border
-        ws[f"A{current_row}"].alignment = center_align
+        add_task_id(center_align, current_row, normal_font, thin_border, ws)
 
         # Task name
         if i == 0:
@@ -139,51 +124,27 @@ def create_timesheet(ws):
 
     # Add worker 2 subtotals
     current_row += 1
-    for col_idx in range(3, 15):
-        col_letter = get_column_letter(col_idx)
-        ws[f"{col_letter}{current_row}"] = 0
-        ws[f"{col_letter}{current_row}"].font = normal_font
-        ws[f"{col_letter}{current_row}"].border = thin_border
-        ws[f"{col_letter}{current_row}"].alignment = center_align
+    add_subtotal_rows(center_align, current_row, normal_font, thin_border, ws)
 
     # Add Workers 3 and 4 - FULL NAME
     for worker in range(3, 5):
         current_row += 2
 
         # Payroll category header
-        ws[f"A{current_row}"] = "PAYROLL CATEGORY"
-        ws[f"A{current_row}"].font = subheader_font
-        ws[f"A{current_row}"].fill = header_fill
-
-        ws[f"B{current_row}"] = "FULL NAME"
-        ws[f"B{current_row}"].font = subheader_font
-        ws[f"B{current_row}"].fill = header_fill
+        add_worker_payroll_headers(current_row, header_fill, subheader_font, ws)
 
         # Worker hours totals
-        ws[f"O{current_row}"] = 0
-        ws[f"O{current_row}"].font = normal_font
-        ws[f"O{current_row}"].border = thin_border
-        ws[f"O{current_row}"].alignment = center_align
-
-        ws[f"P{current_row}"] = 0
-        ws[f"P{current_row}"].font = normal_font
-        ws[f"P{current_row}"].border = thin_border
-        ws[f"P{current_row}"].alignment = center_align
+        add_worker_hours_totals(center_align, current_row, normal_font, thin_border, ws)
 
         # Add tasks
         for i in range(3):
             current_row += 1
 
             # Task ID
-            ws[f"A{current_row}"] = 1
-            ws[f"A{current_row}"].font = normal_font
-            ws[f"A{current_row}"].border = thin_border
-            ws[f"A{current_row}"].alignment = center_align
+            add_task_id(center_align, current_row, normal_font, thin_border, ws)
 
             # Task name
-            ws[f"B{current_row}"] = "JOB SPECIFIC TASK"
-            ws[f"B{current_row}"].font = normal_font
-            ws[f"B{current_row}"].border = thin_border
+            add_task_name_row(current_row, normal_font, thin_border, ws)
 
         # Add foreman section
         current_row += 1
@@ -192,93 +153,147 @@ def create_timesheet(ws):
 
         # Add subtotals
         current_row += 1
-        for col_idx in range(3, 15):
-            col_letter = get_column_letter(col_idx)
-            ws[f"{col_letter}{current_row}"] = 0
-            ws[f"{col_letter}{current_row}"].font = normal_font
-            ws[f"{col_letter}{current_row}"].border = thin_border
-            ws[f"{col_letter}{current_row}"].alignment = center_align
+        add_subtotal_rows(center_align, current_row, normal_font, thin_border, ws)
 
     # Add summary section
     current_row += 2
 
     # Gray background
-    for row in range(current_row, current_row + 3):
-        for col in range(1, 17):
-            cell = ws.cell(row=row, column=col)
-            cell.fill = gray_fill
+    fill_gray_background(current_row, gray_fill, ws)
 
     # Worked row
-    ws[f"B{current_row}"] = "Worked"
-    ws[f"B{current_row}"].font = subheader_font
-    ws[f"B{current_row}"].border = thin_border
-    ws[f"B{current_row}"].alignment = center_align
+    add_worked_header(center_align, current_row, subheader_font, thin_border, ws)
 
     # Hours data
+    current_row = fill_hours_data(center_align, current_row, normal_font, subheader_font, thin_border, ws)
+
+    # Total sick and extra
+    add_worker_hours_totals(center_align, current_row, normal_font, thin_border, ws)
+
+    # Add/Delete Worker buttons
+    current_row += 3
+
+    # Add Worker
+    create_add_worker_button(center_align, current_row, green_fill, normal_font, thin_border, ws)
+
+    # First create and style C, D, and E cells
+    style_and_merge(current_row, green_fill, thin_border, ws)
+
+    # Delete Worker
+    create_delete_worker_button(center_align, current_row, normal_font, red_fill, thin_border, ws)
+
+
+def create_delete_worker_button(center_align, current_row, normal_font, red_fill, thin_border, ws):
+    cell = ws.Cell(f"Q{current_row}")
+    cell.value = "Delete Worker"
+    cell.font = normal_font
+    cell.border = thin_border
+    cell.alignment = center_align
+    cell.fill = red_fill
+
+
+def style_and_merge(current_row, green_fill, thin_border, ws):
+    for col_letter in ['C', 'D', 'E']:
+        cell = ws.Cell(f"{col_letter}{current_row}")
+        cell.fill = green_fill
+        cell.border = thin_border
+    # Then merge
+    ws.merge_cells(f'C{current_row}:E{current_row}')
+
+
+def create_add_worker_button(center_align, current_row, green_fill, normal_font, thin_border, ws):
+    cell = ws.Cell(f"C{current_row}")
+    cell.value = "Add Worker +"
+    cell.font = normal_font
+    cell.border = thin_border
+    cell.alignment = center_align
+    cell.fill = green_fill
+
+
+def fill_hours_data(center_align, current_row, normal_font, subheader_font, thin_border, ws):
     hours_data = [5, 4, 8, 1, 0, 0, 0]
     hours_columns = ['C', 'E', 'G', 'I', 'K', 'M', 'N']
-
     for idx, (col, hours) in enumerate(zip(hours_columns, hours_data)):
-        ws[f"{col}{current_row}"] = hours
-        ws[f"{col}{current_row}"].font = normal_font
-        ws[f"{col}{current_row}"].border = thin_border
-        ws[f"{col}{current_row}"].alignment = center_align
-
+        cell = ws.Cell(f"{col}{current_row}")
+        cell.value = hours
+        cell.font = normal_font
+        cell.border = thin_border
+        cell.alignment = center_align
     # Total
-    ws[f"O{current_row}"] = 18  # Total shown in the image
-    ws[f"O{current_row}"].font = subheader_font
-    ws[f"O{current_row}"].border = thin_border
-    ws[f"O{current_row}"].alignment = center_align
-
+    ws_cell = ws.Cell(f"O{current_row}")
+    ws_cell.value = 18  # Total shown in the image
+    ws_cell.font = subheader_font
+    ws_cell.border = thin_border
+    ws_cell.alignment = center_align
     # Sick row
     current_row += 1
     ws[f"B{current_row}"] = "Sick"
     ws[f"B{current_row}"].font = subheader_font
     ws[f"B{current_row}"].border = thin_border
     ws[f"B{current_row}"].alignment = center_align
-
     # Zero sick hours
     for col in hours_columns:
         ws[f"{col}{current_row}"] = 0
         ws[f"{col}{current_row}"].font = normal_font
         ws[f"{col}{current_row}"].border = thin_border
         ws[f"{col}{current_row}"].alignment = center_align
+    return current_row
 
-    # Total sick and extra
+
+def fill_gray_background(current_row, gray_fill, ws):
+    for row in range(current_row, current_row + 3):
+        for col in range(1, 17):
+            cell = ws.cell(row=row, column=col)
+            cell.fill = gray_fill
+
+
+def add_worked_header(center_align, current_row, subheader_font, thin_border, ws):
+    ws[f"B{current_row}"] = "Worked"
+    ws[f"B{current_row}"].font = subheader_font
+    ws[f"B{current_row}"].border = thin_border
+    ws[f"B{current_row}"].alignment = center_align
+
+
+def add_task_name_row(current_row, normal_font, thin_border, ws):
+    ws[f"B{current_row}"] = "JOB SPECIFIC TASK"
+    ws[f"B{current_row}"].font = normal_font
+    ws[f"B{current_row}"].border = thin_border
+
+
+def add_worker_payroll_headers(current_row, header_fill, subheader_font, ws):
+    ws[f"A{current_row}"] = "PAYROLL CATEGORY"
+    ws[f"A{current_row}"].font = subheader_font
+    ws[f"A{current_row}"].fill = header_fill
+    ws[f"B{current_row}"] = "FULL NAME"
+    ws[f"B{current_row}"].font = subheader_font
+    ws[f"B{current_row}"].fill = header_fill
+
+
+def add_task_id(center_align, current_row, normal_font, thin_border, ws):
+    ws[f"A{current_row}"] = 1
+    ws[f"A{current_row}"].font = normal_font
+    ws[f"A{current_row}"].border = thin_border
+    ws[f"A{current_row}"].alignment = center_align
+
+
+def add_subtotal_rows(center_align, current_row, normal_font, thin_border, ws):
+    for col_idx in range(3, 15):
+        col_letter = get_column_letter(col_idx)
+        ws[f"{col_letter}{current_row}"] = 0
+        ws[f"{col_letter}{current_row}"].font = normal_font
+        ws[f"{col_letter}{current_row}"].border = thin_border
+        ws[f"{col_letter}{current_row}"].alignment = center_align
+
+
+def add_worker_hours_totals(center_align, current_row, normal_font, thin_border, ws):
     ws[f"O{current_row}"] = 0
-    ws[f"O{current_row}"].font = subheader_font
+    ws[f"O{current_row}"].font = normal_font
     ws[f"O{current_row}"].border = thin_border
     ws[f"O{current_row}"].alignment = center_align
-
     ws[f"P{current_row}"] = 0
     ws[f"P{current_row}"].font = normal_font
     ws[f"P{current_row}"].border = thin_border
     ws[f"P{current_row}"].alignment = center_align
-
-    # Add/Delete Worker buttons
-    current_row += 3
-
-    # Add Worker
-    ws[f"C{current_row}"] = "Add Worker +"
-    ws[f"C{current_row}"].font = normal_font
-    ws[f"C{current_row}"].border = thin_border
-    ws[f"C{current_row}"].alignment = center_align
-    ws[f"C{current_row}"].fill = green_fill
-
-    # First create and style C, D, and E cells
-    for col_letter in ['C', 'D', 'E']:
-        ws[f"{col_letter}{current_row}"].fill = green_fill
-        ws[f"{col_letter}{current_row}"].border = thin_border
-
-    # Then merge
-    ws.merge_cells(f'C{current_row}:E{current_row}')
-
-    # Delete Worker
-    ws[f"Q{current_row}"] = "Delete Worker"
-    ws[f"Q{current_row}"].font = normal_font
-    ws[f"Q{current_row}"].border = thin_border
-    ws[f"Q{current_row}"].alignment = center_align
-    ws[f"Q{current_row}"].fill = red_fill
 
 
 def add_payroll_category_header(current_row, header_fill, subheader_font, ws):
