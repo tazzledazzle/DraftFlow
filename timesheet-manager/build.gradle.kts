@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.10")
+	implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.10")
 	implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-security")
