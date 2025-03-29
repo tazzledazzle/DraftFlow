@@ -1,8 +1,8 @@
 // src/main/kotlin/com/yourcompany/timesheet/entity/User.kt
-package com.yourcompany.timesheet.entity
+package com.northshore.timesheet.entity
 
 import jakarta.persistence.*
-import java.time.LocalDateTime
+import kotlinx.datetime.LocalDateTime
 
 @Entity
 @Table(name = "users")

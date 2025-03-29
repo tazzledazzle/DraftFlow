@@ -1,18 +1,21 @@
 // src/main/kotlin/com/yourcompany/timesheet/entity/Project.kt
-package com.yourcompany.timesheet.entity
+package com.northshore.timesheet.entity
 
 import jakarta.persistence.*
-import java.time.LocalDate
-import java.time.LocalDateTime
+import kotlinx.datetime.Clock.System
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import org.hibernate.annotations.CascadeType
+
 
 @Entity
-@Table(name = "projects")
 class Project(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    @Column(nullable = false)
     var name: String,
 
     @Column
@@ -29,7 +32,7 @@ class Project(
     var projectManager: User? = null,
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now(),
+    val createdAt: LocalDateTime = System.now().toLocalDateTime(TimeZone.UTC),
 
     @OneToMany(mappedBy = "project", cascade = [CascadeType.ALL], orphanRemoval = true)
     val tasks: MutableList<Task> = mutableListOf()
