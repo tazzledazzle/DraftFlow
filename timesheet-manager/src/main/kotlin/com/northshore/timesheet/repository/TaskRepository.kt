@@ -1,9 +1,10 @@
 package com.northshore.timesheet.repository
 
-import com.yourcompany.timesheet.entity.Task
+import com.northshore.timesheet.entity.Task
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
+
 
 // src/main/kotlin/com/yourcompany/timesheet/repository/TaskRepository.kt
 

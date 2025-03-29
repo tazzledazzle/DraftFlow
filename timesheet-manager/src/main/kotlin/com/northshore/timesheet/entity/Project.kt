@@ -7,36 +7,50 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.hibernate.annotations.CascadeType
+import kotlinx.serialization.Serializable
 
 
 @Entity
-class Project(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+@Serializable
+class Project{
 
-    var name: String,
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private var id: Long? = null
+
+    @Column(nullable = false)
+    var name: String? = null
+        private set
 
     @Column
-    var description: String? = null,
+    var description: String? = null
 
     @Column(name = "start_date")
-    var startDate: LocalDate? = null,
+    var startDate: LocalDate? = null
 
     @Column(name = "end_date")
-    var endDate: LocalDate? = null,
+    var endDate: LocalDate? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_manager_id")
-    var projectManager: User? = null,
+    var projectManager: User? = null
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    val createdAt: LocalDateTime = System.now().toLocalDateTime(TimeZone.UTC),
+    val createdAt: String = System.now().toLocalDateTime(TimeZone.UTC).toString()
 
     @OneToMany(mappedBy = "project", cascade = [CascadeType.ALL], orphanRemoval = true)
     val tasks: MutableList<Task> = mutableListOf()
-) {
+
+    protected constructor() {
+        this.name = ""
+    }
+    constructor(name: String, description: String?, startDate: LocalDate?, endDate: LocalDate?, projectManager: User?) {
+        this.name = name
+        this.description = description
+        this.startDate = startDate
+        this.endDate = endDate
+        this.projectManager = projectManager
+    }
     // Utility methods
     fun addTask(task: Task) {
         tasks.add(task)

@@ -2,10 +2,14 @@
 package com.northshore.timesheet.entity
 
 import jakarta.persistence.*
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.serialization.Serializable
 
 @Entity
 @Table(name = "users")
+@Serializable
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +28,7 @@ class User(
     var role: String,
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now(),
+    val createdAt: String = Clock.System.now().toLocalDateTime(TimeZone.UTC).toString(),
 
     @OneToMany(mappedBy = "projectManager")
     val managedProjects: MutableList<Project> = mutableListOf()

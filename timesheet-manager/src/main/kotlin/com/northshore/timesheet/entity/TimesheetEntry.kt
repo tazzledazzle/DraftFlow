@@ -12,10 +12,12 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Serializable
 
 
 @Entity
 @Table(name = "timesheet_entries")
+@Serializable
 class TimesheetEntry(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +30,7 @@ class TimesheetEntry(
     var hoursWorked: Double,
 
     @Column(name = "work_date", nullable = false)
-    var workDate: LocalDate,
+    var workDate: String,
 
     @Column
     var notes: String? = null,
@@ -38,5 +40,5 @@ class TimesheetEntry(
     var task: Task? = null,
 
     @Column(name = "submitted_at", nullable = false)
-    val submittedAt: LocalDateTime = LocalDateTime.now()
+    val submittedAt: String = ""
 )
