@@ -15,67 +15,112 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 //import org.springframework.web.bind.annotation.Valid
+import jakarta.validation.Valid
+import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
+import org.springframework.validation.BindingResult
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
-@RestController
-@RequestMapping("/api/projects")
-class ProjectApiController(private val projectService: ProjectService) {
+@Controller
+@RequestMapping("/projects")
+class ProjectController(
+    private val projectService: ProjectService,
+    private val taskService: TaskService,
+    private val userService: UserService
+) {
 
     @GetMapping
-    fun getAllProjects(): ResponseEntity<List<ProjectDto>> {
-        val projects = projectService.getAllProjects()
-        return ResponseEntity.ok(projects)
+    fun listProjects(model: Model): String {
+        model.addAttribute("projects", projectService.getAllProjects())
+        return "projects/list"
+    }
+
+    @GetMapping("/create")
+    fun createProjectForm(model: Model): String {
+        model.addAttribute("project", ProjectCreateDto(name = ""))
+        model.addAttribute("projectManagers", userService.getAllUsers())
+        return "projects/create"
+    }
+
+    @PostMapping("/create")
+    fun createProject(
+        @Valid @ModelAttribute("project") projectDto: ProjectCreateDto,
+        bindingResult: BindingResult,
+        redirectAttributes: RedirectAttributes,
+        model: Model
+    ): String {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("projectManagers", userService.getAllUsers())
+            return "projects/create"
+        }
+
+        val created = projectService.createProject(projectDto)
+        redirectAttributes.addFlashAttribute("message", "Project created successfully")
+        return "redirect:/projects/${created.id}"
     }
 
     @GetMapping("/{id}")
-    fun getProject(@PathVariable id: Long): ResponseEntity<ProjectDto> {
-        return projectService.getProjectById(id)
-            ?.let { ResponseEntity.ok(it) }
-            ?: ResponseEntity.notFound().build()
+    fun viewProject(@PathVariable id: Long, model: Model): String {
+        val project = projectService.getProjectById(id)
+            ?: return "redirect:/projects"
+
+        model.addAttribute("project", project)
+        model.addAttribute("tasks", taskService.getTasksByProject(id))
+        return "projects/view"
     }
 
-    @GetMapping("/manager/{managerId}")
-    fun getProjectsByManager(@PathVariable managerId: Long): ResponseEntity<List<ProjectDto>> {
-        val projects = projectService.getProjectsByManager(managerId)
-        return ResponseEntity.ok(projects)
+    @GetMapping("/{id}/edit")
+    fun editProjectForm(@PathVariable id: Long, model: Model): String {
+        val project = projectService.getProjectById(id)
+            ?: return "redirect:/projects"
+
+        model.addAttribute("project", ProjectUpdateDto(
+            name = project.name,
+            description = project.description,
+            startDate = project.startDate,
+            endDate = project.endDate,
+            projectManagerId = project.projectManagerId
+        ))
+        model.addAttribute("projectId", id)
+        model.addAttribute("projectManagers", userService.getAllUsers())
+        return "projects/edit"
     }
 
-    @GetMapping("/search")
-    fun searchProjects(@RequestParam name: String): ResponseEntity<List<ProjectDto>> {
-        val projects = projectService.findProjectsByName(name)
-        return ResponseEntity.ok(projects)
-    }
-
-    @GetMapping("/active")
-    fun getActiveProjects(): ResponseEntity<List<ProjectDto>> {
-        val projects = projectService.getActiveProjects()
-        return ResponseEntity.ok(projects)
-    }
-
-    @PostMapping
-    fun createProject( @RequestBody projectDto: ProjectCreateDto): ResponseEntity<ProjectDto> {
-        val created = projectService.createProject(projectDto)
-        return ResponseEntity
-            .created(URI.create("/api/projects/${created.id}"))
-            .body(created)
-    }
-
-    @PutMapping("/{id}")
+    @PostMapping("/{id}/edit")
     fun updateProject(
         @PathVariable id: Long,
-        @RequestBody projectDto: ProjectUpdateDto
-    ): ResponseEntity<ProjectDto> {
-        return projectService.updateProject(id, projectDto)
-            ?.let { ResponseEntity.ok(it) }
-            ?: ResponseEntity.notFound().build()
+        @Valid @ModelAttribute("project") projectDto: ProjectUpdateDto,
+        bindingResult: BindingResult,
+        redirectAttributes: RedirectAttributes,
+        model: Model
+    ): String {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("projectId", id)
+            model.addAttribute("projectManagers", userService.getAllUsers())
+            return "projects/edit"
+        }
+
+        projectService.updateProject(id, projectDto)
+        redirectAttributes.addFlashAttribute("message", "Project updated successfully")
+        return "redirect:/projects/${id}"
     }
 
-    @DeleteMapping("/{id}")
-    fun deleteProject(@PathVariable id: Long): ResponseEntity<Void> {
-        val deleted = projectService.deleteProject(id)
-        return if (deleted) {
-            ResponseEntity.noContent().build()
-        } else {
-            ResponseEntity.notFound().build()
-        }
+    @PostMapping("/{id}/delete")
+    fun deleteProject(
+        @PathVariable id: Long,
+        redirectAttributes: RedirectAttributes
+    ): String {
+        projectService.deleteProject(id)
+        redirectAttributes.addFlashAttribute("message", "Project deleted successfully")
+        return "redirect:/projects"
+    }
+
+    @GetMapping("/{id}/excel-token")
+    fun generateExcelToken(@PathVariable id: Long, model: Model): String {
+        // This will be implemented when we add security features
+        model.addAttribute("projectId", id)
+        model.addAttribute("token", "sample-token-placeholder")
+        return "projects/excel-token"
     }
 }

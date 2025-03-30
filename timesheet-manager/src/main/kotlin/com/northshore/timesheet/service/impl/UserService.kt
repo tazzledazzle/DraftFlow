@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service
 
 
 interface UserService {
-    fun findByUsername(username: String): Optional<User>
-    fun findById(id: Long): Optional<User>
+    fun findByUsername(username: String): User?
+    fun findById(id: Long): User?
     fun getAllUsers(): List<User>
-    fun createUser(user: User): User
+    fun createUser(user: User): User?
 }
 
 @Service
@@ -20,19 +20,19 @@ class UserServiceImpl(
     private val passwordEncoder: PasswordEncoder
 ) : UserService {
 
-    override fun findByUsername(username: String): Optional<User> {
+    override fun findByUsername(username: String): User? {
         return userRepository.findByUsername(username)
     }
 
-    override fun findById(id: Long): Optional<User> {
-        return userRepository.findById(id)
+    override fun findById(id: Long): User? {
+        return userRepository.findById(id).get()
     }
 
     override fun getAllUsers(): List<User> {
         return userRepository.findAll()
     }
 
-    override fun createUser(user: User): User {
+    override fun createUser(user: User): User? {
         // Encode password before saving
         user.password = passwordEncoder.encode(user.password)
         return userRepository.save(user)
