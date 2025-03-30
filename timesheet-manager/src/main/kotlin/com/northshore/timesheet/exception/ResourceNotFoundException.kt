@@ -1,3 +1,3 @@
 package com.northshore.timesheet.exception
 
-class ResourceNotFoundException(message: String) : kotlin.RuntimeException(message)
+class ResourceNotFoundException(message: String) : RuntimeException(message)

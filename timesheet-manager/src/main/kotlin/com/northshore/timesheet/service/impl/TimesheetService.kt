@@ -4,6 +4,8 @@ import com.northshore.timesheet.dto.TaskHoursDto
 import com.northshore.timesheet.dto.TimesheetEntryCreateDto
 import com.northshore.timesheet.dto.TimesheetEntryDto
 import com.northshore.timesheet.dto.toDto
+import com.northshore.timesheet.dto.toEntity
+import com.northshore.timesheet.exception.ResourceNotFoundException
 import com.northshore.timesheet.repository.TaskRepository
 import com.northshore.timesheet.repository.TimesheetEntryRepository
 import kotlinx.datetime.LocalDate
@@ -67,7 +69,7 @@ class TimesheetServiceImpl(
                 val task = entries.first().task!!
                 TaskHoursDto(
                     taskId = taskId,
-                    taskName = task.name,
+                    taskName = task.name!!,
                     totalHours = entries.sumOf { it.hoursWorked }
                 )
             }
