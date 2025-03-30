@@ -4,9 +4,13 @@ import com.northshore.timesheet.dto.ProjectCreateDto
 import com.northshore.timesheet.dto.ProjectDto
 import com.northshore.timesheet.dto.ProjectUpdateDto
 import com.northshore.timesheet.dto.toDto
+import com.northshore.timesheet.dto.toEntity
 import com.northshore.timesheet.repository.ProjectRepository
 import com.northshore.timesheet.repository.UserRepository
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,7 +22,7 @@ interface ProjectService {
     fun createProject(projectDto: ProjectCreateDto): ProjectDto
     fun updateProject(id: Long, projectDto: ProjectUpdateDto): ProjectDto?
     fun deleteProject(id: Long): Boolean
-    fun getActiveProjects(date: LocalDate = LocalDate.now()): List<ProjectDto>
+    fun getActiveProjects(date: String? = null): List<ProjectDto>
     fun findProjectsByName(name: String): List<ProjectDto>
 }
 
@@ -86,7 +90,7 @@ class ProjectServiceImpl(
         }
     }
 
-    override fun getActiveProjects(date: LocalDate): List<ProjectDto> {
+    override fun getActiveProjects(date: String?): List<ProjectDto> {
         return projectRepository.findActiveProjects(date)
             .map { it.toDto() }
     }

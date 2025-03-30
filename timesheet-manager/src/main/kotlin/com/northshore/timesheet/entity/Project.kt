@@ -20,7 +20,7 @@ class Project{
 
     @Column(nullable = false)
     var name: String? = null
-        private set
+
 
     @Column
     var description: String? = null

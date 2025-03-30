@@ -15,5 +15,5 @@ interface ProjectRepository : JpaRepository<Project, Long> {
     fun findByNameContainingIgnoreCase(name: String): List<Project>
 
     @Query("SELECT p FROM Project p WHERE p.startDate <= :date AND (p.endDate IS NULL OR p.endDate >= :date)")
-    fun findActiveProjects(@Param("date") date: LocalDate): List<Project>
+    fun findActiveProjects(@Param("date") date: String?): List<Project>
 }
