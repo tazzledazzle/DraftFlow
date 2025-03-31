@@ -1,0 +1,22 @@
+{
+  "name": "excel-addin",
+  "version": "1.0.0",
+  "description": "add-in to extract and write data to excel sheets",
+  "license": "ISC",
+  "author": "terence schumacher",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production"
+  },
+  "dependencies": {
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1",
+    "exceljs": "^4.2.0"
+  },
+  "devDependencies": {
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1"
+  }
+}

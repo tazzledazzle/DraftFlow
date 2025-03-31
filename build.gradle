@@ -1,48 +1,75 @@
 plugins {
+    id 'org.springframework.boot' version '3.4.3'
     id 'org.jetbrains.kotlin.jvm' version '2.1.10'
-//    id 'org.jetbrains.kotlin.plugin.spring' version '1.9.25'
-//    id 'org.springframework.boot' version '3.4.2'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.25'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.9.25'
 }
 
-group = 'com.tazzledazzle'
+group = 'package com.northshore'
 version = '0.0.1-SNAPSHOT'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
-
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
 repositories {
     mavenCentral()
     mavenLocal()
 }
 
 dependencies {
-//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-//    implementation 'org.flywaydb:flyway-core'
-//    implementation 'org.flywaydb:flyway-database-postgresql'
-    implementation 'org.jetbrains.kotlin:kotlin-reflect'
-    // https://mvnrepository.com/artifact/com.aspose/aspose-cad
-    implementation files('$projectDir/gradle/aspose-cad-24.6.1.jar')
+    implementation('org.springframework.boot:spring-boot-starter-web:3.4.3')
+    implementation('org.springframework.boot:spring-boot-starter-validation:3.4.3')
+    implementation('org.springframework.boot:spring-boot-starter-actuator:3.4.3')
+    // thymeleaf web views
+    implementation('org.springframework.boot:spring-boot-starter-thymeleaf:3.4.3')
+    implementation('org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.3.RELEASE')
+    // Database
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.4.3")
+    implementation('org.postgresql:postgresql:42.7.3')
+    implementation("org.flywaydb:flyway-core:9.21.0")
+    // Security
+    implementation("org.springframework.boot:spring-boot-starter-security:3.4.3")
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
+    // API Documentation
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
-//    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//    runtimeOnly 'org.postgresql:postgresql'
+    // Kotlin
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.1.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.10")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
 
-//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//    testImplementation 'io.kotest:kotest-runner-junit5-jvm'
-//    testImplementation 'io.kotest:kotest-assertions-core-jvm'
-    testImplementation 'io.kotest:kotest-core-jvm'
-//    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
-    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
-//    testImplementation 'org.springframework.security:spring-security-test'
-//    testImplementation 'org.testcontainers:junit-jupiter'
-//    testImplementation 'org.testcontainers:postgresql'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // Utilities
+    implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("org.apache.commons:commons-csv:1.10.0")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.6") // For caching
+
+    // Logging
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
+
+    // Development
+    developmentOnly("org.springframework.boot:spring-boot-devtools:3.4.3")
+
+    // Test dependencies
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.3")
+    testImplementation("org.springframework.security:spring-security-test:6.1.3")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
+    testImplementation("org.assertj:assertj-core:3.24.2")
+    testImplementation("com.h2database:h2:2.2.220") // In-memory database for testing
+    testImplementation("org.testcontainers:postgresql:1.19.1") // For integration tests with real PostgreSQL
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.9.0")
+    testImplementation "org.jetbrains.kotlin:kotlin-test:2.1.10"
 }
 
 kotlin {
@@ -51,12 +78,37 @@ kotlin {
     }
 }
 
-//allOpen {
-//    annotation 'jakarta.persistence.Entity'
-//    annotation 'jakarta.persistence.MappedSuperclass'
-//    annotation 'jakarta.persistence.Embeddable'
-//}
-
-tasks.named('test') {
+test {
     useJUnitPlatform()
+
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}
+
+// https://www.thymeleaf.org/doc/tutorials/3.1/usingthymeleaf.html
+// JPA/Hibernate annotations
+allOpen {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.Embeddable")
+    annotation("javax.persistence.MappedSuperclass")
+}
+noArg {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
+}
+
+tasks.bootJar {
+    mainClass = "App"
+}
+
+plugins.apply("jacoco")
+tasks.named("jacocoTestReport") {
+    dependsOn(tasks.test)
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
 }

@@ -1,0 +1,68 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: timesheet_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build -x test
+
+      - name: Run tests
+        run: ./gradlew test
+
+#      - name: Build Excel Add-In
+#        working-directory: ./excel-addin
+#        run: |
+#          npm install
+#          npm run build
+#
+#      - name: Run Excel Add-In tests
+#        working-directory: ./excel-addin
+#        run: npm test
+#
+#      - name: Build Docker image
+#        run: ./gradlew bootBuildImage --imageName=timesheet-app:latest
+#
+#      - name: Save Docker image
+#        run: docker save timesheet-app:latest > timesheet-app.tar
+#
+#      - name: Upload Docker image
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: docker-image
+#          path: timesheet-app.tar
+
