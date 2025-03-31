@@ -25,6 +25,9 @@ repositories {
 dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.10")
 	implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
+	implementation("io.jsonwebtoken:jjwt-impl:0.11.2")
+	implementation("io.jsonwebtoken:jjwt-api:0.11.2")
+	implementation("io.jsonwebtoken:jjwt-jackson:0.11.2")
 	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-security")

@@ -1,0 +1,66 @@
+<!-- src/main/resources/templates/projects/create.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+<header th:replace="fragments/header :: navbar"></header>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav th:replace="fragments/sidebar :: sidebar"></nav>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Create Project</h1>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">
+          <form th:action="@{/projects/create}" th:object="${project}" method="post">
+            <div class="mb-3">
+              <label for="name" class="form-label">Project Name</label>
+              <input type="text" class="form-control" id="name" th:field="*{name}" required>
+              <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea class="form-control" id="description" th:field="*{description}" rows="3"></textarea>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input type="date" class="form-control" id="startDate" th:field="*{startDate}">
+              </div>
+              <div class="col-md-6">
+                <label for="endDate" class="form-label">End Date</label>
+                <input type="date" class="form-control" id="endDate" th:field="*{endDate}">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="projectManagerId" class="form-label">Project Manager</label>
+              <select class="form-control" id="projectManagerId" th:field="*{projectManagerId}">
+                <option value="">-- Select Project Manager --</option>
+                <option th:each="manager : ${projectManagers}"
+                        th:value="${manager.id}"
+                        th:text="${manager.username}"></option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <button type="submit" class="btn btn-primary">Create Project</button>
+              <a th:href="@{/projects}" class="btn btn-secondary">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+<div th:replace="fragments/footer :: scripts"></div>
+</body>
+</html>
